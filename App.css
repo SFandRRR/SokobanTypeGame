@@ -21,9 +21,15 @@ Game{
 }
 
 #layer0, #layer1, #layer2 {
-    position: absolute;
+    position: fixed;
     top: 50px;
     left: 50px;
+}
+
+#keypad {
+    position: absolute;
+    top: 350px;
+    left: 100px;
 }
 
 #layer0 {

@@ -17,7 +17,7 @@ const levels = [
     ]
 ]
 
-class Background extends React.Component {
+class TileMap extends React.Component {
 
     constructor(props) {
         super(props);
@@ -57,16 +57,79 @@ class Background extends React.Component {
     }
 }
 
+function MoveButton(props) {
+    return (
+        <button className="movebutton" onClick={props.onClick}>
+            {props.value}
+        </button>
+    );
+}
+
+class Player extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            CorX: 0,
+            CorY: 0
+        }
+    }
+
+    renderMoveButton(i,dir) {
+        return (
+            <MoveButton
+                value={dir}
+                onClick={() => i=+1}
+            />
+        );
+    }
+    
+    changeCor(x, y) {
+        x=this.state.CorX+x
+        y=this.state.CorY+y     
+        this.setState({ CorX: x, CorY: y });
+        console.log("Player postion:" + [this.state.CorX, this.state.CorY])
+    }
+
+    render() {
+        return (
+            <div>
+                <table id="tile_table">
+                    <tr>
+                        <th id="tile"></th>
+                        <th id="tile"><MoveButton onClick={() => this.changeCor(0,1)} value="/\"></MoveButton></th>
+                        <th id="tile"></th>
+                    </tr>
+                    <tr>
+                        <th id="tile"><MoveButton onClick={() => this.changeCor(-1, 0)} value="<"></MoveButton></th>
+                        <th id="tile"></th>
+                        <th id="tile"><MoveButton onClick={() => this.changeCor(1, 0)} value=">"></MoveButton></th>
+                    </tr>
+                    <tr>
+                        <th id="tile"></th>
+                        <th id="tile"><MoveButton onClick={() => this.changeCor(0, -1)} value="\/"></MoveButton></th>
+                        <th id="tile"></th>
+                    </tr>
+                </table>         
+                {this.state.CorX},{this.state.CorY}
+            </div>
+        )
+    }
+}
+
 class Game extends React.Component {
 
     render() {
         return (
             <div>
                 <div id="layer0">
-                    <Background map={levels[0]} />
+                    <TileMap map={levels[0]} />
                 </div>
                 <div id="layer1">
-                    <Background  map={levels[1]} />
+                    <TileMap  map={levels[1]} />
+                </div>
+                <div id="keypad">
+                    <Player ></Player>
                 </div>
             </div>
         )
