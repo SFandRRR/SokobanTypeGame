@@ -5,7 +5,7 @@ import './App.css';
 const levels = [
     [
         [" ", " ", " ", " ", " "],
-        [" ", " ", " ", " ", " "],
+        [" ", "1", " ", " ", " "],
         [" ", " ", " ", " ", " "],
         [" ", " ", " ", " ", " "],
         [" ", " ", " ", " ", " "]
@@ -25,7 +25,8 @@ class TileMap extends React.Component {
         super(props);
         this.state = {
             tile_map: this.props.map,
-            move_cmd: this.props.move
+            move_cmd: this.props.move,
+            collision_map: this.props.collision
         }
     }
 
@@ -35,33 +36,32 @@ class TileMap extends React.Component {
         )
     }
 
-    move(map, x, y, dir) {
+    
+
+    move(map, x, y, dir,collision) {
         let tile = map[y][x]
-        tile="z"
-       
+        //tile="test"
         switch (dir) {
             case "N":
                 if (y == 0) { break; }
-
-                map[y - 1][x] = tile
-                map[y][x] = " "
+                    map[y - 1][x] = tile
+                    map[y][x] = " "
                 break;
 
-            case "S":
-                map[y + 1][x] = tile
-                map[y][x] = " "
+            case "S":            
+                    map[y + 1][x] = tile
+                    map[y][x] = " "
                 break;
 
-            case "E":
-                map[y][x+1] = tile
-                map[y][x] = " "
-                break;
+            case "E":               
+                    map[y][x + 1] = tile
+                    map[y][x] = " "
 
+                break;
             case "W":
                 if (x == 0) { break; }
-
-                map[y][x-1] = tile
-                map[y][x] = " "
+                    map[y][x - 1] = tile
+                    map[y][x] = " "
                 break;
 
             default:
@@ -74,10 +74,11 @@ class TileMap extends React.Component {
 
         const { move_cmd } = this.state;
         const { tile_map } = this.state;
+        const { collision_map } = this.state;
 
         for (let i in move_cmd) {
             console.log("issued a move: " + move_cmd[i])
-            this.move(tile_map, move_cmd[i][0], move_cmd[i][1], move_cmd[i][2])
+            this.move(tile_map, move_cmd[i][0], move_cmd[i][1], move_cmd[i][2],collision_map)
         }
 
         let content = [];
@@ -120,11 +121,23 @@ class Game extends React.Component {
 
             layer_background: null,
             layer_entity: null,
-            
+
         }
     }
 
-    move_cmd=[]
+    move_cmd = []
+
+    checkCollision(collision, x, y) {
+        if (collision[y][x] == 1) {
+            console.log("collision : solid")
+            return false
+        }
+        if (collision[y][x] == "B") {
+            console.log("collision : box")
+            return false
+        }
+        return true
+    }
 
     changeXY(x, y) {
 
@@ -132,32 +145,35 @@ class Game extends React.Component {
 
         if (x == -1) { dir = "W" }
         if (x == 1) { dir = "E" }
-        if (y == -1) { dir ="N" }
+        if (y == -1) { dir = "N" }
         if (y == 1) { dir = "S" }
+
+        
+        this.move_cmd.pop()
         this.move_cmd.push([this.state.player_position[0], this.state.player_position[1], dir])
 
         x = this.state.player_position[0] + x
         y = this.state.player_position[1] + y
-        this.setState({ player_position: [x, y] });
 
-        
-
-        console.log("Player postion:" + this.state.player_position)
-        console.log("Move List:" + this.move_cmd)
-
+        if (this.checkCollision(levels[0], x, y)) {
+            this.setState({ player_position: [x, y] });
+            console.log("Player postion:" + this.state.player_position)
+            console.log("Move List:" + this.move_cmd)
+        }
+      
         this.state.new_move = true
     }
 
     render() {
 
-        if (this.state.new_level) { 
-         
+        if (this.state.new_level) {
+
             let starter_pos = levels[1]
-            for (let y in starter_pos) {         
-                for (let x in starter_pos[y]) {             
+            for (let y in starter_pos) {
+                for (let x in starter_pos[y]) {
                     if (starter_pos[y][x] == "S") {
                         console.log("Start position found!")
-                        this.state.player_position = [parseInt(x) , parseInt(y)]
+                        this.state.player_position = [parseInt(x), parseInt(y)]
                         break;
                     }
                 }
@@ -165,14 +181,14 @@ class Game extends React.Component {
             //[2,1,"N"]
 
             this.state.layer_background = <TileMap map={levels[0]} />
-            
+
             this.state.new_level = false
-         
+
         }
 
         if (this.state.new_move) {
 
-            this.setState({ layer_entity: <TileMap map={levels[1]} move={this.move_cmd} /> });         
+            this.setState({ layer_entity: <TileMap map={levels[1]} move={this.move_cmd} collision={levels[0]} /> });
 
             this.state.new_move = false
         }
@@ -188,29 +204,28 @@ class Game extends React.Component {
                 <div id="layer1">
                     {this.state.layer_entity}
                 </div>
-                <button>boing</button>
                 <div id="keypad">
-                        <table id="tile_table">
-                            <tr>
-                                <th id="tile"></th>
+                    <table id="tile_table">
+                        <tr>
+                            <th id="tile"></th>
                             <th id="tile"><MoveButton onClick={() => this.changeXY(0, -1)} value="/\"></MoveButton></th>
-                                <th id="tile"></th>
-                            </tr>
-                            <tr>
+                            <th id="tile"></th>
+                        </tr>
+                        <tr>
                             <th id="tile"><MoveButton onClick={() => this.changeXY(-1, 0)} value="<"></MoveButton></th>
-                                <th id="tile"></th>
+                            <th id="tile"></th>
                             <th id="tile"><MoveButton onClick={() => this.changeXY(1, 0)} value=">"></MoveButton></th>
-                            </tr>
-                            <tr>
-                                <th id="tile"></th>
+                        </tr>
+                        <tr>
+                            <th id="tile"></th>
                             <th id="tile"><MoveButton onClick={() => this.changeXY(0, 1)} value="\/"></MoveButton></th>
-                                <th id="tile"></th>
-                            </tr>
+                            <th id="tile"></th>
+                        </tr>
                     </table>
                     {this.state.player_position}
                 </div>
 
-                
+
             </div>
         )
     }
