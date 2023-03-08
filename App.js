@@ -26,7 +26,6 @@ class TileMap extends React.Component {
         this.state = {
             tile_map: this.props.map,
             move_cmd: this.props.move,
-            collision_map: this.props.collision
         }
     }
 
@@ -38,7 +37,7 @@ class TileMap extends React.Component {
 
     
 
-    move(map, x, y, dir,collision) {
+    move(map, x, y, dir) {
         let tile = map[y][x]
         //tile="test"
         switch (dir) {
@@ -74,11 +73,12 @@ class TileMap extends React.Component {
 
         const { move_cmd } = this.state;
         const { tile_map } = this.state;
-        const { collision_map } = this.state;
+
+        console.log(move_cmd)
 
         for (let i in move_cmd) {
             console.log("issued a move: " + move_cmd[i])
-            this.move(tile_map, move_cmd[i][0], move_cmd[i][1], move_cmd[i][2],collision_map)
+            this.move(tile_map, move_cmd[i][0], move_cmd[i][1], move_cmd[i][2])
         }
 
         let content = [];
@@ -126,15 +126,70 @@ class Game extends React.Component {
     }
 
     move_cmd = []
+    move_plr_cmd = []
+    move_box_cmd = []
 
-    checkCollision(collision, x, y) {
+    checkCollision(collision, x, y, dir) {
         if (collision[y][x] == 1) {
             console.log("collision : solid")
             return false
         }
-        if (collision[y][x] == "B") {
-            console.log("collision : box")
-            return false
+        if (levels[1][y][x] == "B") {
+            console.log("collision : box, checking")
+
+            switch (dir) { 
+                case "N":
+                    y=y-1
+                    break;
+
+                case "S":
+                    y = y+1
+                    break;
+
+                case "E":
+                    x=x+1
+                    break;
+
+                case "W":
+                    x = x - 1
+                    break;
+
+                default:
+                    break;
+            }
+
+            if (levels[0][y][x]==1) {
+                console.log("collision : unmovable")
+                return false
+            }
+            if (levels[1][y][x] == "B") {
+                console.log("collision : second box")
+                return false
+            }
+
+            switch (dir) {
+                case "N":
+                    y = y + 1
+                    break;
+
+                case "S":
+                    y = y - 1
+                    break;
+
+                case "E":
+                    x = x - 1
+                    break;
+
+                case "W":
+                    x = x + 1
+                    break;
+
+                default:
+                    break;
+            }
+
+            
+            this.move_box_cmd.push([x, y, dir])
         }
         return true
     }
@@ -149,16 +204,25 @@ class Game extends React.Component {
         if (y == 1) { dir = "S" }
 
         
-        this.move_cmd.pop()
-        this.move_cmd.push([this.state.player_position[0], this.state.player_position[1], dir])
+        this.move_plr_cmd.pop()
+        this.move_plr_cmd.pop()
+        this.move_plr_cmd.pop()
+        this.move_plr_cmd.pop()
+
+        this.move_box_cmd.pop()
+        this.move_box_cmd.pop()
+
+        this.move_plr_cmd.push([this.state.player_position[0], this.state.player_position[1], dir])
 
         x = this.state.player_position[0] + x
         y = this.state.player_position[1] + y
 
-        if (this.checkCollision(levels[0], x, y)) {
+        if (this.checkCollision(levels[0], x, y,dir)) {
+
             this.setState({ player_position: [x, y] });
             console.log("Player postion:" + this.state.player_position)
-            console.log("Move List:" + this.move_cmd)
+            console.log("Move List:" + this.move_plr_cmd)
+
         }
       
         this.state.new_move = true
@@ -188,7 +252,12 @@ class Game extends React.Component {
 
         if (this.state.new_move) {
 
-            this.setState({ layer_entity: <TileMap map={levels[1]} move={this.move_cmd} collision={levels[0]} /> });
+            for (let i in this.move_box_cmd) { 
+                this.move_plr_cmd.push(this.move_box_cmd[i])
+                this.move_plr_cmd.reverse()
+            }
+
+            this.setState({ layer_entity: <TileMap map={levels[1]} move={this.move_plr_cmd} collision={levels[0]} /> });
 
             this.state.new_move = false
         }
