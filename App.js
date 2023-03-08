@@ -25,7 +25,7 @@ class TileMap extends React.Component {
         super(props);
         this.state = {
             tile_map: this.props.map,
-            move_cmd: this.props.move_cmd
+            move_cmd: this.props.move
         }
     }
 
@@ -37,11 +37,33 @@ class TileMap extends React.Component {
 
     move(map, x, y, dir) {
         let tile = map[y][x]
-
+        tile="z"
+       
         switch (dir) {
             case "N":
+                if (y == 0) { break; }
+
                 map[y - 1][x] = tile
                 map[y][x] = " "
+                break;
+
+            case "S":
+                map[y + 1][x] = tile
+                map[y][x] = " "
+                break;
+
+            case "E":
+                map[y][x+1] = tile
+                map[y][x] = " "
+                break;
+
+            case "W":
+                if (x == 0) { break; }
+
+                map[y][x-1] = tile
+                map[y][x] = " "
+                break;
+
             default:
                 return null;
         }
@@ -50,8 +72,8 @@ class TileMap extends React.Component {
 
     render() {
 
-        const { tile_map } = this.state;
         const { move_cmd } = this.state;
+        const { tile_map } = this.state;
 
         for (let i in move_cmd) {
             console.log("issued a move: " + move_cmd[i])
@@ -94,23 +116,42 @@ class Game extends React.Component {
         this.state = {
             player_position: [0, 0],
             new_level: true,
+            new_move: true,
 
             layer_background: null,
             layer_entity: null,
+            
         }
     }
 
+    move_cmd=[]
+
     changeXY(x, y) {
+
+        let dir = ""
+
+        if (x == -1) { dir = "W" }
+        if (x == 1) { dir = "E" }
+        if (y == -1) { dir ="N" }
+        if (y == 1) { dir = "S" }
+        this.move_cmd.push([this.state.player_position[0], this.state.player_position[1], dir])
+
         x = this.state.player_position[0] + x
         y = this.state.player_position[1] + y
-        this.setState({ player_position : [x,y] });
+        this.setState({ player_position: [x, y] });
+
+        
+
         console.log("Player postion:" + this.state.player_position)
+        console.log("Move List:" + this.move_cmd)
+
+        this.state.new_move = true
     }
 
     render() {
 
         if (this.state.new_level) { 
-
+         
             let starter_pos = levels[1]
             for (let y in starter_pos) {         
                 for (let x in starter_pos[y]) {             
@@ -122,13 +163,21 @@ class Game extends React.Component {
                 }
             }
             //[2,1,"N"]
-            let move_cmd=[]
 
             this.state.layer_background = <TileMap map={levels[0]} />
-            this.state.layer_entity = <TileMap map={levels[1]} move_cmd={move_cmd} />
-
+            
             this.state.new_level = false
+         
         }
+
+        if (this.state.new_move) {
+
+            this.setState({ layer_entity: <TileMap map={levels[1]} move={this.move_cmd} /> });         
+
+            this.state.new_move = false
+        }
+
+        //this.move_cmd = []
 
         return (
             <div>
