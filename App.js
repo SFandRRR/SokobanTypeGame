@@ -52,28 +52,26 @@ const levels = [
     [
         ["1", "3", "3", "3", "3", "3", "3", "3", "1"],
         ["2", "0", "0", "0", "0", "0", "0", "0", "2"],
-        ["2", "0", "2", "0", "3", "3", "3", "0", "2"],
+        ["2", "0", "2", "B", "3", "3", "3", "0", "2"],
+        ["2", "E", "2", "0", "0", "0", "0", "0", "2"],
         ["2", "0", "2", "0", "0", "0", "0", "0", "2"],
-        ["2", "0", "2", "0", "0", "0", "0", "0", "2"],
-        ["2", "0", "0", "0", "3", "3", "3", "0", "2"],
+        ["2", "0", "0", "B", "3", "3", "3", "0", "2"],
         ["2", "0", "0", "0", "0", "0", "0", "0", "2"],
         ["1", "3", "4", "0", "0", "0", "4", "3", "1"],
-        ["1", "1", "2", "0", "0", "0", "2", "3", "1"],
+        ["1", "1", "2", "0", "S", "0", "2", "3", "1"],
         ["1", "1", "2", "0", "0", "0", "2", "0", "2"],
         ["1", "1", "1", "3", "3", "3", "1", "3", "1"],
     ],
     [
-        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-        [" ", " ", " ", "B", " ", " ", " ", " ", " "],
-        [" ", " ", " ", " ", "B", " ", " ", " ", " "],
-        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-        [" ", " ", " ", " ", "S", " ", " ", " ", " "],
-        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
+        ["1", "3", "3", "3", "1"],
+        ["2", "0", "0", "0", "2"],
+        ["2", "E", "0", "0", "2"],
+        ["2", "0", "B", "0", "2"],
+        ["2", "0", "B", "0", "2"],
+        ["2", "0", "0", "0", "2"],
+        ["2", "0", "S", "0", "2"],
+        ["2", "0", "0", "0", "2"],
+        ["1", "3", "3", "3", "1"],
     ]
 ]
 
@@ -236,6 +234,9 @@ function tileInterpreter(tilemap) {
                 if (tilemap[y][x] == "S") {
                     new_tilemap[y][x] = tileImage(spr_player_s, "player")
                 }
+                if (tilemap[y][x] == "E") {
+                    new_tilemap[y][x] = tileImage(spr_ladder, "exit")
+                }
             }
         }
     tilemap = new_tilemap
@@ -388,6 +389,10 @@ class Game extends React.Component {
             new_level: true,
             new_move: true,
 
+            current_level: 1,
+            current_background: 0,
+            current_entities: 0,
+
             layer_background: null,
             layer_entity: null,
 
@@ -399,13 +404,13 @@ class Game extends React.Component {
     move_box_cmd = []
     checkCollision(collision, x, y, dir) {
 
-        console.log(levels[0][y][x].props.id)
+        console.log(this.state.current_background[y][x].props.id)
 
-        if (levels[0][y][x].props.id =="solid") {
+        if (this.state.current_background[y][x].props.id =="solid") {
             console.log("collision : solid")
             return false
         }
-        if (levels[1][y][x].props.id=="box") {
+        if (this.state.current_entities[y][x].props.id=="box") {
             console.log("collision : box, checking")
 
             switch (dir) { 
@@ -429,11 +434,11 @@ class Game extends React.Component {
                     break;
             }
 
-            if (levels[0][y][x].props.id=="solid") {
+            if (this.state.current_background[y][x].props.id=="solid") {
                 console.log("collision : unmovable")
                 return false
             }
-            if (levels[1][y][x].props.id=="box") {
+            if (this.state.current_entities[y][x].props.id=="box") {
                 console.log("collision : second box")
                 return false
             }
@@ -488,7 +493,7 @@ class Game extends React.Component {
         x = this.state.player_position[0] + x
         y = this.state.player_position[1] + y
 
-        if (this.checkCollision(levels[0], x, y,dir)) {
+        if (this.checkCollision(this.state.current_background, x, y,dir)) {
 
             this.setState({ player_position: [x, y] });
             console.log("Player postion:" + this.state.player_position)
@@ -503,7 +508,37 @@ class Game extends React.Component {
 
         if (this.state.new_level) {
 
-            let starter_pos = levels[1]
+            let collision = []
+            let entities = []
+            for (let y in levels[this.state.current_level]) {
+                let colrow=[]
+                let entrow = []
+
+                for (let x in levels[this.state.current_level][y]) {
+                    let tile = levels[this.state.current_level][y][x]
+                    //console.log("t " + tile)
+                    if (tile >= 0) {
+                        colrow = colrow.concat([tile])
+                        entrow = entrow.concat([" "])
+                    } else {
+                        colrow = colrow.concat([0])
+                        entrow = entrow.concat([tile])
+                    }
+                  
+                }
+                collision.push(colrow)
+                entities.push(entrow)
+            }
+            
+            this.state.current_entities = entities
+            this.state.current_background = collision
+
+            this.setState({ current_entities: entities, current_background: collision })
+
+            //console.log("col " + this.state.current_background)
+            //console.log("ent " + this.state.current_entities)
+
+            let starter_pos = this.state.current_entities
             for (let y in starter_pos) {
                 for (let x in starter_pos[y]) {
                     if (starter_pos[y][x] == "S") {
@@ -514,10 +549,9 @@ class Game extends React.Component {
                 }
             }
 
-            this.state.layer_background = <TileMap map={levels[0]} />
+            this.state.layer_background = <TileMap map={this.state.current_background} />
 
             this.setState({ new_level: false })
-            //
         }
 
         if (this.state.new_move) {
@@ -527,25 +561,27 @@ class Game extends React.Component {
                 this.move_plr_cmd.reverse()
             }
 
-            this.setState({ layer_entity: <TileMap map={levels[1]} move={this.move_plr_cmd} collision={levels[0]} xy={this.state.player_position} /> });
+            this.setState({ layer_entity: <TileMap map={this.state.current_entities} move={this.move_plr_cmd} collision={this.state.current_background} xy={this.state.player_position} /> });
 
             this.setState({ new_move: false })
         }
 
-        let GameBackground_width = (levels[0].length*32)+"px"
-        let GameBackground_height = (levels[0].length * 32 + 96) + "px"
+        console.log("ziom "+this.state.current_background.length)
 
+        let GameBackground_width = (this.state.current_background.length*32)+"px"
+        let GameBackground_height = (this.state.current_background.length * 32 + 96) + "px"
+        
         let controlSchemeStyle = {
             "position": "fixed",
-            "top": (levels[0].length * 32 + 96+32) + "px",
-            "left": (levels[0].length * 32)/2-80 + "px",
+            "top": (this.state.current_background.length * 32 + 96+32) + "px",
+            "left": (this.state.current_background.length * 32)/2-80 + "px",
 
             "overflow-clip-margin": "0px",
             "overflow": "hidden",
 
             "z-index": " 1",            
         }
-
+        
         //this.move_cmd = []//
         //return (<div><TileMap map={levels[0]} /></div>)
         //<div>{this.state.layer_entity}</div>/

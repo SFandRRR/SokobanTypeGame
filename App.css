@@ -29,8 +29,8 @@ button{
 
 .backgroundImage {
     resize: both;
-    width: 150%;
-    height: 150%;
+    width: 608px;
+    height: 608px;
     image-rendering: pixelated;
     display: block;
     opacity: 0.75;
