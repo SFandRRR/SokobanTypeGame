@@ -88,17 +88,17 @@ function tileInterpreter(tilemap) {
                 if (tile == 4) {
                     if (tilemap[y][x - 1] == 3 && tilemap[y][(parseInt(x) + 1)] == 0) {
                         if (tilemap[(parseInt(y) + 1)][x] == 0) {
-                            new_tilemap[y][x] = tileImage(spr_border_corner_right_bottom)
+                            new_tilemap[y][x] = tileImage(spr_border_corner_right_bottom, "solid")
                         } else {
-                            new_tilemap[y][x] = tileImage(spr_border_corner_right)
+                            new_tilemap[y][x] = tileImage(spr_border_corner_right, "solid")
                         }
 
                     }
                     if (tilemap[y][x - 1] == 0 && tilemap[y][(parseInt(x) + 1)] == 3) {
                         if (tilemap[(parseInt(y) + 1)][x] == 0) {
-                            new_tilemap[y][x] = tileImage(spr_border_corner_left_bottom)
+                            new_tilemap[y][x] = tileImage(spr_border_corner_left_bottom, "solid")
                         } else {
-                            new_tilemap[y][x] = tileImage(spr_border_corner_left)
+                            new_tilemap[y][x] = tileImage(spr_border_corner_left, "solid")
                         }
                     }
                 }
@@ -113,23 +113,23 @@ function tileInterpreter(tilemap) {
                     if (tilemap[y][(parseInt(x) + 1)] == 0 && tilemap[y][(parseInt(x) - 1)] == 0) {
 
                         if (tilemap[(parseInt(y) + 1)][x] == 0) {
-                            new_tilemap[y][x] = tileImage(spr_border_cavity_vertical_bottom)
+                            new_tilemap[y][x] = tileImage(spr_border_cavity_vertical_bottom, "solid")
                         } else
                             if (tilemap[y - 1][x] == 0) {
-                                new_tilemap[y][x] = tileImage(spr_border_cavity_vertical_top)
+                                new_tilemap[y][x] = tileImage(spr_border_cavity_vertical_top, "solid")
                             } else {
-                                new_tilemap[y][x] = tileImage(spr_border_cavity_vertical)
+                                new_tilemap[y][x] = tileImage(spr_border_cavity_vertical, "solid")
                             }
                     } else {
                         if (tilemap[y][(parseInt(x) + 1)] == 0) {
-                            new_tilemap[y][x] = tileImage(spr_border_left)
+                            new_tilemap[y][x] = tileImage(spr_border_left, "solid")
                         }
                         if (tilemap[y][x - 1] == 0) {
-                            new_tilemap[y][x] = tileImage(spr_border_right)
+                            new_tilemap[y][x] = tileImage(spr_border_right, "solid")
                         }
                     }
                     if (tilemap[y][x] == 2) {
-                        new_tilemap[y][x] = tileImage(spr_border_left)
+                        new_tilemap[y][x] = tileImage(spr_border_left, "solid")
                     }
 
                 }
@@ -145,48 +145,48 @@ function tileInterpreter(tilemap) {
                         if (tilemap[(parseInt(y) + 1)][x] == 0 && tilemap[y - 1][x] == 0) {
 
                             if (tilemap[y][(parseInt(x) + 1)] == 0) {
-                                new_tilemap[y][x] = tileImage(spr_border_cavity_horizontal_right)
+                                new_tilemap[y][x] = tileImage(spr_border_cavity_horizontal_right, "solid")
                             } else
                                 if (tilemap[y][x - 1] == 0) {
-                                    new_tilemap[y][x] = tileImage(spr_border_cavity_horizontal_left)
+                                    new_tilemap[y][x] = tileImage(spr_border_cavity_horizontal_left, "solid")
                                 } else { 
-                                    new_tilemap[y][x] = tileImage(spr_border_cavity_horizontal)
+                                    new_tilemap[y][x] = tileImage(spr_border_cavity_horizontal, "solid")
                                 }
                         }
 
                     }
                     if (y == 0) {
-                        new_tilemap[y][x] = tileImage(spr_border_top)
+                        new_tilemap[y][x] = tileImage(spr_border_top, "solid")
                     }
 
                     if (y == (maxY - 1)) {
                         if (tilemap[y][x - 1] == 1 && tilemap[y][(parseInt(x) + 1)] == 1) {
-                            new_tilemap[y][x] = tileImage(spr_border_bottom_middle)
+                            new_tilemap[y][x] = tileImage(spr_border_bottom_middle, "solid")
                         }else
 
                         if (tilemap[y][x - 1] == 1) {
-                            new_tilemap[y][x] = tileImage(spr_border_bottom_left)
+                            new_tilemap[y][x] = tileImage(spr_border_bottom_left, "solid")
 
                         }else
                         if (tilemap[y][(parseInt(x) + 1)] == 1) {
-                            new_tilemap[y][x] = tileImage(spr_border_bottom_right)
+                            new_tilemap[y][x] = tileImage(spr_border_bottom_right, "solid")
                         } else { 
-                            new_tilemap[y][x] = tileImage(spr_border_bottom)
+                            new_tilemap[y][x] = tileImage(spr_border_bottom, "solid")
                         }
                     } else if (tilemap[y - 1][x] == 0) {
-                        if (!(tilemap[y - 1][x] == 0)) { new_tilemap[y][x] = tileImage(spr_border_bottom) } else {
+                        if (!(tilemap[y - 1][x] == 0)) { new_tilemap[y][x] = tileImage(spr_border_bottom, "solid") } else {
                             if (tilemap[y][x] == 3) {
                                 if (tilemap[y][x - 1] == 1) {
-                                    new_tilemap[y][x] = tileImage(spr_border_bottom_left)
+                                    new_tilemap[y][x] = tileImage(spr_border_bottom_left, "solid")
                                 }
                                 if (tilemap[y][(parseInt(x) + 1)] == 1) {
-                                    new_tilemap[y][x] = tileImage(spr_border_bottom_right)
+                                    new_tilemap[y][x] = tileImage(spr_border_bottom_right, "solid")
                                 }
                             }
                         }
 
                     } else if (tilemap[(parseInt(y) + 1)][x] == 0) {
-                        new_tilemap[y][x] = tileImage(spr_border_top)
+                        new_tilemap[y][x] = tileImage(spr_border_top, "solid")
                     }
                 }
 
@@ -196,7 +196,7 @@ function tileInterpreter(tilemap) {
         for (let y in tilemap) {
             for (let x in tilemap[y]) {
                 if (tilemap[y][x] == "1") {
-                    new_tilemap[y][x] = tileImage(spr_empty)
+                    new_tilemap[y][x] = tileImage(spr_empty, "solid")
                 }
                 if (tilemap[y][x] == "0") {
                     new_tilemap[y][x] = tileImage(spr_ground)
@@ -220,9 +220,9 @@ function tileInterpreter(tilemap) {
                   
                     const rand = Math.floor(1 + Math.random() * (3 - 1));
                     //console.log(rand)
-                    if (rand == 1) { new_tilemap[y][x] = tileImage(spr_box_a) }
-                    if (rand == 2) { new_tilemap[y][x] = tileImage(spr_box_b) }
-                    if (rand == 3) { new_tilemap[y][x] = tileImage(spr_box_c) }
+                    if (rand == 1) { new_tilemap[y][x] = tileImage(spr_box_a, "box") }
+                    if (rand == 2) { new_tilemap[y][x] = tileImage(spr_box_b, "box") }
+                    if (rand == 3) { new_tilemap[y][x] = tileImage(spr_box_c,"box") }
                 }
                 if (tilemap[y][x] == "S") {     
                     new_tilemap[y][x] = tileImage(spr_player_s,"player")                   
@@ -350,13 +350,15 @@ class Game extends React.Component {
     move_cmd = []
     move_plr_cmd = []
     move_box_cmd = []
-
     checkCollision(collision, x, y, dir) {
-        if (collision[y][x] >= 1) {
+
+        console.log(levels[0][y][x].props.id)
+
+        if (levels[0][y][x].props.id =="solid") {
             console.log("collision : solid")
             return false
         }
-        if (levels[1][y][x] == "B") {
+        if (levels[1][y][x].props.id=="box") {
             console.log("collision : box, checking")
 
             switch (dir) { 
@@ -380,11 +382,11 @@ class Game extends React.Component {
                     break;
             }
 
-            if (levels[0][y][x]==1) {
+            if (levels[0][y][x].props.id=="solid") {
                 console.log("collision : unmovable")
                 return false
             }
-            if (levels[1][y][x] == "B") {
+            if (levels[1][y][x].props.id=="box") {
                 console.log("collision : second box")
                 return false
             }
@@ -410,7 +412,6 @@ class Game extends React.Component {
                     break;
             }
 
-            
             this.move_box_cmd.push([x, y, dir])
         }
         return true
