@@ -56,25 +56,31 @@ const levels = [
         ["1", "1", "1", "3", "3", "3", "1", "3", "1"],
     ],
     [
-        [" ", " ", " ", " ", " "],
-        [" ", " ", "B", " ", " "],
-        [" ", " ", "B", " ", " "],
-        [" ", " ", "S", " ", " "],
-        [" ", " ", " ", " ", " "]
+        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", "B", " ", " ", " ", " "],
+        [" ", " ", " ", " ", "B", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", "S", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
     ]
 ]
 
 
-function tileImage(graphic) {
-    return (<img class="tile_img" src={graphic }/>)
+function tileImage(graphic, id="") {
+
+    return (<img class="tile_img" id={id} src={graphic }/>)
 }
 
-function tileInterpreter(tilemap, type) {
+function tileInterpreter(tilemap) {
 
     let new_tilemap = tilemap
     let maxY = tilemap.length
 
-    if (type == "background") {
         for (let y in tilemap) {
             for (let x in tilemap[y]) {
                 let tile = tilemap[y][x]
@@ -194,52 +200,77 @@ function tileInterpreter(tilemap, type) {
                 }
                 if (tilemap[y][x] == "0") {
                     new_tilemap[y][x] = tileImage(spr_ground)
+                    const rand = Math.floor(1 + Math.random() * (30 - 1));
+                    //console.log(rand)
+                    if (rand == 13) { new_tilemap[y][x] = tileImage(spr_ground_a) }
+                    if (rand == 12) { new_tilemap[y][x] = tileImage(spr_ground_b) }
+                    if (rand == 11) { new_tilemap[y][x] = tileImage(spr_ground_c) }
+                    
                 }
             }
         }
                                                           
-    }
-    if (type == "entity") {
 
-    }
+        for (let y in tilemap) {
+            for (let x in tilemap[y]) {//
+                if (tilemap[y][x] == " ") {
+                    new_tilemap[y][x] = tileImage(spr_empty)
+                }
+                if (tilemap[y][x] == "B") {
+                  
+                    const rand = Math.floor(1 + Math.random() * (3 - 1));
+                    //console.log(rand)
+                    if (rand == 1) { new_tilemap[y][x] = tileImage(spr_box_a) }
+                    if (rand == 2) { new_tilemap[y][x] = tileImage(spr_box_b) }
+                    if (rand == 3) { new_tilemap[y][x] = tileImage(spr_box_c) }
+                }
+                if (tilemap[y][x] == "S") {     
+                    new_tilemap[y][x] = tileImage(spr_player_s,"player")                   
+                }
+            }
+        }
   
     tilemap = new_tilemap
-    console.log("processed tile map :"+tilemap)
+    console.log("processed tile map")
     return new_tilemap;
 }
 
 class TileMap extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
             tile_map: this.props.map,
             move_cmd: this.props.move,
+            plr_xy: this.props.xy,
         }
     }
-
+    
     move(map, x, y, dir) {
         let tile = map[y][x]
-        //tile="test"
+        let specialid =tile.props.id
         switch (dir) {
             case "N":
                 if (y == 0) { break; }
+                    if (specialid == "player") { tile = tileImage(spr_player_n , "player") }
                     map[y - 1][x] = tile
                     map[y][x] = " "
                 break;
 
             case "S":            
+                    if (specialid == "player") { tile = tileImage(spr_player_s, "player") }
                     map[y + 1][x] = tile
                     map[y][x] = " "
                 break;
 
-            case "E":               
+            case "E":    
+                if (specialid == "player") { tile = tileImage(spr_player_e, "player") }
                     map[y][x + 1] = tile
                     map[y][x] = " "
 
                 break;
             case "W":
                 if (x == 0) { break; }
+                if (specialid == "player") { tile = tileImage(spr_player_w, "player") }
                     map[y][x - 1] = tile
                     map[y][x] = " "
                 break;
@@ -255,22 +286,30 @@ class TileMap extends React.Component {
         const { move_cmd } = this.state;
         const { tile_map } = this.state;
 
-        console.log(move_cmd)
-
         for (let i in move_cmd) {
             console.log("issued a move: " + move_cmd[i])
             this.move(tile_map, move_cmd[i][0], move_cmd[i][1], move_cmd[i][2])
         }
-
+        
         let content = [];
+       
+        tileInterpreter(tile_map)
 
-        tileInterpreter(tile_map,"background")
-
-        for (let i in tile_map) {
+        for (let y in tile_map) {
+            for (let x in tile_map[y]) {
+                if (tile_map[y][x] == "S") {
+                    this.lastX = x
+                    this.lastY = y                   
+                }
+            }
+        }
+        
+        for (let y in tile_map) {
             let tile_map_row = [];
 
-            for (let z in tile_map[i]) {
-                tile_map_row.push(<th >{tile_map[i][z]}</th>);
+            for (let x in tile_map[y]) {
+
+                tile_map_row.push(<th >{tile_map[y][x]}</th>);
             }
             content.push(<tr>{tile_map_row}</tr>)
         }
@@ -440,21 +479,22 @@ class Game extends React.Component {
                 this.move_plr_cmd.reverse()
             }
 
-            this.setState({ layer_entity: <TileMap map={levels[1]} move={this.move_plr_cmd} collision={levels[0]} /> });
+            this.setState({ layer_entity: <TileMap map={levels[1]} move={this.move_plr_cmd} collision={levels[0]} xy={this.state.player_position} /> });
 
             this.state.new_move = false
         }
 
-        //this.move_cmd = []
-        return (<div><TileMap map={levels[0]} /></div>)
-        /*return (
+        //this.move_cmd = []//
+        //return (<div><TileMap map={levels[0]} /></div>)
+        //<div>{this.state.layer_entity}</div>/
+        return (
             <div>
                 <div id="layer0">
-                    
+                    <div>{this.state.layer_background}</div>
                 </div>
-
-                <div id="layer1">
                     
+                <div id="layer1">
+                    <div>{this.state.layer_entity}</div>
                 </div>
                 <div id="keypad">
                     <table id="tile_table">
@@ -476,10 +516,8 @@ class Game extends React.Component {
                     </table>
                     {this.state.player_position}
                 </div>
-                <img src={spr_player_e} />
-
             </div>
-        )*/
+        )
     }
 }
 
