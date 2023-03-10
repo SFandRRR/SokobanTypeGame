@@ -9,9 +9,9 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-body{
-    background-color:#111111;
-    color:white;
+body {
+    background-color: #111111;
+    color: white;
 }
 
 button{
@@ -27,11 +27,19 @@ button{
     display: block;
 }
 
-#tile{
+.backgroundImage {
+    resize: both;
+    width: 150%;
+    height: 150%;
+    image-rendering: pixelated;
+    display: block;
+    opacity: 0.75;
+}
+
+#tile {
     width: 32px;
     height: 32px;
     background-color: rgba(0,0,0,0);
-    
 }
 
 
@@ -41,31 +49,51 @@ button{
     border: none;
 }
 
-th{
-    width:32px;
-    height:32px;
+th {
+    width: 32px;
+    height: 32px;
 }
 
-#layer0, #layer1, #layer2 {
+#dpad {
+    background-image: url(./graphics/dpad.png);
+    background-repeat: no-repeat;
+    background-size: 160px 160px;
+    image-rendering: pixelated;
+    padding-top: 4px;
+    padding-left: 14px;
+    z-index: 1;
+    height: 160px;
+    width: 160px;
+}
+
+#dpad_table {   
+    border-spacing: 0 0;
+    border-collapse: collapse;
+    border: none;
+}
+
+#layer_background {
+    z-index: 2;
     position: fixed;
-    top: 50px;
-    left: 50px;
+    margin:32px;
 }
 
-#keypad {
-    position: absolute;
-    top: 450px;
-    left: 100px;
-}
-
-#layer0 {
+#layer_entities {
     z-index: 3;
-}
-
-#layer1 {
-    z-index: 4;
+    position: fixed;
+    margin: 32px;
 }
 
 #layer2 {
     z-index: 5;
+}
+
+button{
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
 }

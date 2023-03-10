@@ -40,6 +40,13 @@ import spr_box_b from './graphics/box_b.png'
 import spr_box_c from './graphics/box_c.png'
 import spr_ladder from './graphics/ladder.png'
 
+import spr_arrow_up from './graphics/arrow_up.png'
+import spr_arrow_left from './graphics/arrow_left.png'
+import spr_arrow_right from './graphics/arrow_right.png'
+import spr_arrow_down from './graphics/arrow_down.png'
+
+import background_mountains_dusk from './graphics/background_mountains_dusk.png'
+
 
 const levels = [
     [
@@ -61,7 +68,7 @@ const levels = [
         [" ", " ", " ", " ", " ", " ", " ", " ", " "],
         [" ", " ", " ", " ", " ", " ", " ", " ", " "],
         [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-        [" ", " ", " ", " ", "B", " ", " ", " ", " "],
+        [" ", " ", " ", "B", " ", " ", " ", " ", " "],
         [" ", " ", " ", " ", "B", " ", " ", " ", " "],
         [" ", " ", " ", " ", " ", " ", " ", " ", " "],
         [" ", " ", " ", " ", "S", " ", " ", " ", " "],
@@ -73,7 +80,7 @@ const levels = [
 
 function tileImage(graphic, id="") {
 
-    return (<img class="tile_img" id={id} src={graphic }/>)
+    return (<img className="tile_img" id={id} src={graphic }/>)
 }
 
 function tileInterpreter(tilemap) {
@@ -86,6 +93,8 @@ function tileInterpreter(tilemap) {
                 let tile = tilemap[y][x]
 
                 if (tile == 4) {
+
+
                     if (tilemap[y][x - 1] == 3 && tilemap[y][(parseInt(x) + 1)] == 0) {
                         if (tilemap[(parseInt(y) + 1)][x] == 0) {
                             new_tilemap[y][x] = tileImage(spr_border_corner_right_bottom, "solid")
@@ -149,7 +158,7 @@ function tileInterpreter(tilemap) {
                             } else
                                 if (tilemap[y][x - 1] == 0) {
                                     new_tilemap[y][x] = tileImage(spr_border_cavity_horizontal_left, "solid")
-                                } else { 
+                                } else {
                                     new_tilemap[y][x] = tileImage(spr_border_cavity_horizontal, "solid")
                                 }
                         }
@@ -162,18 +171,18 @@ function tileInterpreter(tilemap) {
                     if (y == (maxY - 1)) {
                         if (tilemap[y][x - 1] == 1 && tilemap[y][(parseInt(x) + 1)] == 1) {
                             new_tilemap[y][x] = tileImage(spr_border_bottom_middle, "solid")
-                        }else
+                        } else
 
-                        if (tilemap[y][x - 1] == 1) {
-                            new_tilemap[y][x] = tileImage(spr_border_bottom_left, "solid")
+                            if (tilemap[y][x - 1] == 1) {
+                                new_tilemap[y][x] = tileImage(spr_border_bottom_left, "solid")
 
-                        }else
-                        if (tilemap[y][(parseInt(x) + 1)] == 1) {
-                            new_tilemap[y][x] = tileImage(spr_border_bottom_right, "solid")
-                        } else { 
-                            new_tilemap[y][x] = tileImage(spr_border_bottom, "solid")
-                        }
-                    } else if (tilemap[y - 1][x] == 0) {
+                            } else
+                                if (tilemap[y][(parseInt(x) + 1)] == 1) {
+                                    new_tilemap[y][x] = tileImage(spr_border_bottom_right, "solid")
+                                } else {
+                                    new_tilemap[y][x] = tileImage(spr_border_bottom, "solid")
+                                }
+                    } else if (y!=0 && tilemap[y - 1][x] == 0) {
                         if (!(tilemap[y - 1][x] == 0)) { new_tilemap[y][x] = tileImage(spr_border_bottom, "solid") } else {
                             if (tilemap[y][x] == 3) {
                                 if (tilemap[y][x - 1] == 1) {
@@ -205,11 +214,11 @@ function tileInterpreter(tilemap) {
                     if (rand == 13) { new_tilemap[y][x] = tileImage(spr_ground_a) }
                     if (rand == 12) { new_tilemap[y][x] = tileImage(spr_ground_b) }
                     if (rand == 11) { new_tilemap[y][x] = tileImage(spr_ground_c) }
-                    
+
                 }
             }
         }
-                                                          
+
 
         for (let y in tilemap) {
             for (let x in tilemap[y]) {//
@@ -217,19 +226,18 @@ function tileInterpreter(tilemap) {
                     new_tilemap[y][x] = tileImage(spr_empty)
                 }
                 if (tilemap[y][x] == "B") {
-                  
+
                     const rand = Math.floor(1 + Math.random() * (3 - 1));
                     //console.log(rand)
                     if (rand == 1) { new_tilemap[y][x] = tileImage(spr_box_a, "box") }
                     if (rand == 2) { new_tilemap[y][x] = tileImage(spr_box_b, "box") }
-                    if (rand == 3) { new_tilemap[y][x] = tileImage(spr_box_c,"box") }
+                    if (rand == 3) { new_tilemap[y][x] = tileImage(spr_box_c, "box") }
                 }
-                if (tilemap[y][x] == "S") {     
-                    new_tilemap[y][x] = tileImage(spr_player_s,"player")                   
+                if (tilemap[y][x] == "S") {
+                    new_tilemap[y][x] = tileImage(spr_player_s, "player")
                 }
             }
         }
-  
     tilemap = new_tilemap
     console.log("processed tile map")
     return new_tilemap;
@@ -316,14 +324,52 @@ class TileMap extends React.Component {
 
         return (
             <div>
-                <table id="tile_table" border="0" cellpadding="0" cellspacing="0">
-                    {content}
+                <table id="tile_table" border="0" cellPadding="0" cellSpacing="0">
+                        {content}
                 </table>
             </div>
 
         )
     }
 }
+
+class GameBackground extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            width: this.props.width,
+            height: this.props.height
+        }
+    }
+
+    render() {
+
+        let gameBackgroundStyle = {
+            "position": "fixed",
+            "top": "0px",
+            "left": "0px",
+
+            "overflow-clip-margin": "0px",
+            "overflow": "hidden",
+
+            "z-index": " -1",
+
+            "width": this.props.width,
+            "height": this.props.height,
+
+        }
+
+        let content =  < img className="backgroundImage" src = { background_mountains_dusk } />
+
+        return (
+            <div id="gamebackground" style={gameBackgroundStyle } >
+                {content}
+            </div>
+        )
+    }
+}
+
 
 function MoveButton(props) {
     return (
@@ -332,6 +378,7 @@ function MoveButton(props) {
         </button>
     );
 }
+
 class Game extends React.Component {
 
     constructor(props) {
@@ -346,7 +393,7 @@ class Game extends React.Component {
 
         }
     }
-
+    
     move_cmd = []
     move_plr_cmd = []
     move_box_cmd = []
@@ -412,6 +459,7 @@ class Game extends React.Component {
                     break;
             }
 
+            
             this.move_box_cmd.push([x, y, dir])
         }
         return true
@@ -465,12 +513,11 @@ class Game extends React.Component {
                     }
                 }
             }
-            //[2,1,"N"]
 
             this.state.layer_background = <TileMap map={levels[0]} />
 
-            this.state.new_level = false
-
+            this.setState({ new_level: false })
+            //
         }
 
         if (this.state.new_move) {
@@ -482,49 +529,67 @@ class Game extends React.Component {
 
             this.setState({ layer_entity: <TileMap map={levels[1]} move={this.move_plr_cmd} collision={levels[0]} xy={this.state.player_position} /> });
 
-            this.state.new_move = false
+            this.setState({ new_move: false })
+        }
+
+        let GameBackground_width = (levels[0].length*32)+"px"
+        let GameBackground_height = (levels[0].length * 32 + 96) + "px"
+
+        let controlSchemeStyle = {
+            "position": "fixed",
+            "top": (levels[0].length * 32 + 96+32) + "px",
+            "left": (levels[0].length * 32)/2-80 + "px",
+
+            "overflow-clip-margin": "0px",
+            "overflow": "hidden",
+
+            "z-index": " 1",            
         }
 
         //this.move_cmd = []//
         //return (<div><TileMap map={levels[0]} /></div>)
         //<div>{this.state.layer_entity}</div>/
         return (
-            <div>
-                <div id="layer0">
-                    <div>{this.state.layer_background}</div>
-                </div>
+            <div>              
+                <div id="board">
+                    <GameBackground width={GameBackground_width} height={GameBackground_height} />
+                    <div id="layer_background">
+                        <div>{this.state.layer_background}</div>
+                    </div>
                     
-                <div id="layer1">
-                    <div>{this.state.layer_entity}</div>
+                    <div id="layer_entities">
+                        <div>{this.state.layer_entity}</div>
+                    </div>
                 </div>
-                <div id="keypad">
-                    <table id="tile_table">
-                        <tr>
-                            <th id="tile"></th>
-                            <th id="tile"><MoveButton onClick={() => this.changeXY(0, -1)} value="/\"></MoveButton></th>
-                            <th id="tile"></th>
-                        </tr>
-                        <tr>
-                            <th id="tile"><MoveButton onClick={() => this.changeXY(-1, 0)} value="<"></MoveButton></th>
-                            <th id="tile"></th>
-                            <th id="tile"><MoveButton onClick={() => this.changeXY(1, 0)} value=">"></MoveButton></th>
-                        </tr>
-                        <tr>
-                            <th id="tile"></th>
-                            <th id="tile"><MoveButton onClick={() => this.changeXY(0, 1)} value="\/"></MoveButton></th>
-                            <th id="tile"></th>
-                        </tr>
-                    </table>
-                    {this.state.player_position}
+                <div id="controlscheme" style={controlSchemeStyle}>
+                    <div id="dpad">                    
+                        <table id="dpad_table" border="0" cellPadding="0" cellSpacing="0">
+                            <tr>
+                                <th id="tile"></th>
+                                <th id="tile"><MoveButton onClick={() => this.changeXY(0, -1)} value={tileImage(spr_arrow_up)}></MoveButton></th>
+                                <th id="tile"></th>
+                            </tr>
+                            <tr>
+                                <th id="tile"><MoveButton onClick={() => this.changeXY(-1, 0)} value={tileImage(spr_arrow_left)}></MoveButton></th>
+                                <th id="tile"></th>
+                                <th id="tile"><MoveButton onClick={() => this.changeXY(1, 0)} value={tileImage(spr_arrow_right)}></MoveButton></th>
+                            </tr>
+                            <tr>
+                                <th id="tile"></th>
+                                <th id="tile"><MoveButton onClick={() => this.changeXY(0, 1)} value={tileImage(spr_arrow_down)}></MoveButton></th>
+                                <th id="tile"></th>
+                            </tr>
+                        </table>
+                        </div>
                 </div>
             </div>
         )
     }
 }
-
+/*
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <div id="maingame"><Game /></div>
-);
+);*/
 
 export default Game;
