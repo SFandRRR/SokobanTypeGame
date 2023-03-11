@@ -47,7 +47,6 @@ import spr_arrow_down from './graphics/arrow_down.png'
 
 import background_mountains_dusk from './graphics/background_mountains_dusk.png'
 
-
 const levels = [
     [
         ["1", "3", "3", "3", "3", "3", "3", "3", "1"],
@@ -57,7 +56,7 @@ const levels = [
         ["2", "0", "2", "0", "0", "0", "0", "0", "2"],
         ["2", "0", "0", "B", "3", "3", "3", "0", "2"],
         ["2", "0", "0", "0", "0", "0", "0", "0", "2"],
-        ["1", "3", "4", "0", "0", "0", "4", "3", "1"],
+        ["1", "3", "4", "0", "B", "0", "4", "3", "1"],
         ["1", "1", "2", "0", "S", "0", "2", "3", "1"],
         ["1", "1", "2", "0", "0", "0", "2", "0", "2"],
         ["1", "1", "1", "3", "3", "3", "1", "3", "1"],
@@ -72,9 +71,24 @@ const levels = [
         ["2", "0", "S", "0", "2"],
         ["2", "0", "0", "0", "2"],
         ["1", "3", "3", "3", "1"],
+    ],
+    [
+        ["1", "3", "1"],
+        ["2", "S", "2"],
+        ["1", "3", "1"],
     ]
 ]
-
+/*
+function functionOne(testInput) {
+    return new Promise((resolve, reject) => {
+        setTimeout(
+            () => {
+                console.log("Inside the promise");
+                resolve();
+            }, 3000
+        );
+    });
+};*/
 
 function tileImage(graphic, id="") {
 
@@ -83,6 +97,7 @@ function tileImage(graphic, id="") {
 
 function tileInterpreter(tilemap) {
 
+    console.log("Interpreting tiles")
     let new_tilemap = tilemap
     let maxY = tilemap.length
 
@@ -303,6 +318,7 @@ class TileMap extends React.Component {
         let content = [];
        
         tileInterpreter(tile_map)
+        //console.log(tile_map)
 
         for (let y in tile_map) {
             for (let x in tile_map[y]) {
@@ -371,6 +387,44 @@ class GameBackground extends React.Component {
     }
 }
 
+function EntitiesCollision(level) {
+
+    const a_collision = new Array
+    const a_entities = new Array
+
+
+    console.log("1")
+    console.log(a_collision)
+    console.log(a_entities)
+
+    for (let y in levels[level]) {
+        const colrow = new Array
+        const entrow = new Array
+
+        for (let x in levels[level][y]) {
+            let tile = levels[level][y][x]
+            //console.log("t " + tile)
+            if (tile >= 0) {
+                colrow.push(tile)
+                entrow.push(" ")
+            } else {
+                colrow.push(0)
+                entrow.push(tile)
+            }
+        }
+
+        a_collision.push(colrow)
+        a_entities.push(entrow)
+    }
+    console.log("2")
+    console.log(a_collision)
+    console.log(a_entities)
+
+    console.log("3")
+    console.log(levels[level])
+    return [a_collision, a_entities]
+}
+
 
 function MoveButton(props) {
     return (
@@ -388,23 +442,33 @@ class Game extends React.Component {
             player_position: [0, 0],
             new_level: true,
             new_move: true,
+            exit_found: false,
 
-            current_level: 1,
-            current_background: 0,
-            current_entities: 0,
+            current_level: 0,
+            current_background: null,
+            current_entities: null,
 
             layer_background: null,
             layer_entity: null,
 
         }
     }
-    
+
     move_cmd = []
     move_plr_cmd = []
     move_box_cmd = []
     checkCollision(collision, x, y, dir) {
 
-        console.log(this.state.current_background[y][x].props.id)
+        if (this.state.current_background[y][x] == 0) {
+            return true
+        }
+
+        if (this.state.current_entities[y][x].props.id == "exit" ) {
+
+            console.log("That's an exit!")
+            this.setState({exit_found:true})
+            return false
+        }
 
         if (this.state.current_background[y][x].props.id =="solid") {
             console.log("collision : solid")
@@ -504,99 +568,101 @@ class Game extends React.Component {
         this.state.new_move = true
     }
 
+
+    changeLevel(currentlevel) {
+
+        this.setState({ currentLevel: currentlevel })
+        this.setState({ new_level: true })
+        this.setState({ new_move: true })
+        this.setState({ exit_found: false })
+    }
+
     render() {
 
-        if (this.state.new_level) {
+        if (this.state.exit_found) {
+            this.changeLevel(0)
+                       
+        }
+        
+        if (this.state.new_level) {     
 
-            let collision = []
-            let entities = []
-            for (let y in levels[this.state.current_level]) {
-                let colrow=[]
-                let entrow = []
-
-                for (let x in levels[this.state.current_level][y]) {
-                    let tile = levels[this.state.current_level][y][x]
-                    //console.log("t " + tile)
-                    if (tile >= 0) {
-                        colrow = colrow.concat([tile])
-                        entrow = entrow.concat([" "])
-                    } else {
-                        colrow = colrow.concat([0])
-                        entrow = entrow.concat([tile])
-                    }
-                  
-                }
-                collision.push(colrow)
-                entities.push(entrow)
-            }
-            
-            this.state.current_entities = entities
-            this.state.current_background = collision
-
-            this.setState({ current_entities: entities, current_background: collision })
-
-            //console.log("col " + this.state.current_background)
-            //console.log("ent " + this.state.current_entities)
+            let ECResult = EntitiesCollision(0)
+         
+            this.state.current_entities = ECResult[1]
+            this.state.current_background = ECResult[0]
 
             let starter_pos = this.state.current_entities
+
+            
+            
+
             for (let y in starter_pos) {
                 for (let x in starter_pos[y]) {
                     if (starter_pos[y][x] == "S") {
-                        console.log("Start position found!")
+                        console.log("Start position found! " + x + " " + y)
                         this.state.player_position = [parseInt(x), parseInt(y)]
                         break;
                     }
                 }
             }
 
-            this.state.layer_background = <TileMap map={this.state.current_background} />
+            this.setState({ layer_background: < TileMap map={this.state.current_background} /> });               
 
             this.setState({ new_level: false })
+            //this.setState({ new_level: true })
+
         }
 
-        if (this.state.new_move) {
+        if (this.state.new_move && this.state.layer_background != null) {
 
-            for (let i in this.move_box_cmd) { 
+            for (let i in this.move_box_cmd) {
                 this.move_plr_cmd.push(this.move_box_cmd[i])
                 this.move_plr_cmd.reverse()
             }
-
             this.setState({ layer_entity: <TileMap map={this.state.current_entities} move={this.move_plr_cmd} collision={this.state.current_background} xy={this.state.player_position} /> });
 
             this.setState({ new_move: false })
+
         }
-
-        console.log("ziom "+this.state.current_background.length)
-
-        let GameBackground_width = (this.state.current_background.length*32)+"px"
-        let GameBackground_height = (this.state.current_background.length * 32 + 96) + "px"
         
+        let GameBackground_width = (this.state.current_background.length * 32) + "px"
+        let GameBackground_height = (this.state.current_background.length * 32 + 96) + "px"
+
         let controlSchemeStyle = {
             "position": "fixed",
-            "top": (this.state.current_background.length * 32 + 96+32) + "px",
-            "left": (this.state.current_background.length * 32)/2-80 + "px",
+            "top": (this.state.current_background.length * 32 + 96 + 32) + "px",
+            "left": (this.state.current_background.length * 32) / 2 - 80 + "px",
 
             "overflow-clip-margin": "0px",
             "overflow": "hidden",
 
-            "z-index": " 1",            
+            "z-index": " 1",
         }
-        
+
+        /*console.log("=================================")
+        console.log(this.state.current_level)
+        console.log(this.state.layer_background)
+        console.log(this.state.layer_entity )
+        console.log("=================================")*/
+
+        //this.setState({ layer_background: < TileMap map={this.state.current_background} /> });
+
         //this.move_cmd = []//
         //return (<div><TileMap map={levels[0]} /></div>)
         //<div>{this.state.layer_entity}</div>/
+        
         return (
             <div>              
                 <div id="board">
                     <GameBackground width={GameBackground_width} height={GameBackground_height} />
                     <div id="layer_background">
-                        <div>{this.state.layer_background}</div>
+                        {this.state.layer_background}
                     </div>
-                    
+
                     <div id="layer_entities">
-                        <div>{this.state.layer_entity}</div>
+                        {this.state.layer_entity}
                     </div>
-                </div>
+                </div >
                 <div id="controlscheme" style={controlSchemeStyle}>
                     <div id="dpad">                    
                         <table id="dpad_table" border="0" cellPadding="0" cellSpacing="0">
@@ -616,16 +682,13 @@ class Game extends React.Component {
                                 <th id="tile"></th>
                             </tr>
                         </table>
-                        </div>
+                    </div>
+                    
                 </div>
+                {this.state.player_position}
             </div>
-        )
+            )
     }
 }
-/*
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-    <div id="maingame"><Game /></div>
-);*/
 
 export default Game;
