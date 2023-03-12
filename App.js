@@ -50,19 +50,21 @@ import background_mountains_day from './graphics/background_mountains_day.png'
 import background_mountains_dusk from './graphics/background_mountains_dusk.png'
 import background_mountains_night from './graphics/background_mountains_night.png'
 
+//https://youtu.be/gI81fuLPz4A
+//Superfilm!
+
 const level_background = [
     [
-        ["1", "3", "3", "3", "3", "3", "3", "3", "1"],
-        ["2", "0", "0", "0", "0", "0", "0", "0", "2"],
-        ["2", "0", "2", "0", "3", "3", "3", "0", "2"],
-        ["2", "0", "2", "0", "0", "0", "0", "0", "2"],
-        ["2", "0", "2", "0", "0", "0", "0", "0", "2"],
-        ["2", "0", "0", "0", "3", "3", "3", "0", "2"],
-        ["2", "0", "0", "0", "0", "0", "0", "0", "2"],
-        ["1", "3", "4", "0", "0", "0", "4", "3", "1"],
-        ["1", "1", "2", "0", "0", "0", "2", "3", "1"],
-        ["1", "1", "2", "0", "0", "0", "2", "0", "2"],
-        ["1", "1", "1", "3", "3", "3", "1", "3", "1"]
+        ["1", "3", "3", "3", "1", "1", "1", "1", "1", "1"],
+        ["2", "0", "0", "0", "4", "3", "3", "3", "1", "1"],
+        ["2", "0", "0", "0", "0", "0", "0", "0", "2", "1"],
+        ["2", "0", "0", "0", "4", "3", "4", "0", "2", "1"],
+        ["1", "3", "3", "3", "1", "1", "2", "0", "2", "1"],
+        ["1", "3", "3", "3", "1", "1", "2", "0", "2", "1"],
+        ["2", "0", "0", "0", "4", "3", "4", "0", "4", "1"],
+        ["2", "0", "0", "0", "0", "0", "0", "0", "0", "2"],
+        ["2", "0", "0", "0", "4", "4", "0", "0", "0", "2"],
+        ["1", "3", "3", "3", "1", "1", "3", "3", "3", "1"],
     ],
     [
         ["1", "3", "3", "3", "1"],
@@ -84,17 +86,16 @@ const level_background = [
 
 const level_entity = [
     [
-        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-        [" ", " ", " ", "B", " ", " ", " ", " ", " "],
-        [" ", "E", " ", " ", " ", " ", " ", " ", " "],
-        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-        [" ", " ", " ", "B", " ", " ", " ", " ", " "],
-        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-        [" ", " ", " ", " ", "B", " ", " ", " ", " "],
-        [" ", " ", " ", " ", "S", " ", " ", " ", " "],
-        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", "S", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", "B", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", "E", " ", " ", "B", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
     ],
     [
         [" ", " ", " ", " ", " "],
@@ -123,7 +124,10 @@ function functionOne(testInput) {
             }, 3000
         );
     });
-};*/
+};
+*/
+
+
 
 function tileImage(graphic, id = "") {
 
@@ -143,7 +147,7 @@ function tileInterpreter(tilemap) {
             if (tile == 4) {
 
 
-                if (tilemap[y][x - 1] == 3 && tilemap[y][(parseInt(x) + 1)] == 0) {
+                if ((tilemap[y][x - 1] == 3 || tilemap[y][x - 1] == 1 || tilemap[y][x - 1] == 4 )&& tilemap[y][(parseInt(x) + 1)] == 0) {
                     if (tilemap[(parseInt(y) + 1)][x] == 0) {
                         new_tilemap[y][x] = tileImage(spr_border_corner_right_bottom, "solid")
                     } else {
@@ -151,11 +155,18 @@ function tileInterpreter(tilemap) {
                     }
 
                 }
-                if (tilemap[y][x - 1] == 0 && tilemap[y][(parseInt(x) + 1)] == 3) {
+
+                if (tilemap[y][x - 1] == 0 && (tilemap[y][(parseInt(x) + 1)] == 3 || tilemap[y][(parseInt(x) + 1)] == 1 || tilemap[y][(parseInt(x) + 1)] == 4)) {
                     if (tilemap[(parseInt(y) + 1)][x] == 0) {
                         new_tilemap[y][x] = tileImage(spr_border_corner_left_bottom, "solid")
                     } else {
                         new_tilemap[y][x] = tileImage(spr_border_corner_left, "solid")
+                    }
+                } else {
+                    if (tilemap[(parseInt(y) + 1)][x] == 0) {
+                        new_tilemap[y][x] = tileImage(spr_border_corner_right_bottom, "solid")
+                    } else {
+                        new_tilemap[y][x] = tileImage(spr_border_corner_right, "solid")
                     }
                 }
             }
@@ -235,16 +246,21 @@ function tileInterpreter(tilemap) {
                         if (tilemap[y][x] == 3) {
                             if (tilemap[y][x - 1] == 1) {
                                 new_tilemap[y][x] = tileImage(spr_border_bottom_left, "solid")
-                            }
+                            } else 
                             if (tilemap[y][(parseInt(x) + 1)] == 1) {
                                 new_tilemap[y][x] = tileImage(spr_border_bottom_right, "solid")
+                            } else {
+                                new_tilemap[y][x] = tileImage(spr_border_bottom, "solid")
                             }
                         }
                     }
 
                 } else if (tilemap[(parseInt(y) + 1)][x] == 0) {
                     new_tilemap[y][x] = tileImage(spr_border_top, "solid")
+                } else if (tilemap[y][(parseInt(x) + 1)] == 4 && tilemap[y][x-1] == 4){
+                    //new_tilemap[y][x] = tileImage(spr_border_bottom_right, "solid")
                 }
+
             }
 
         }
@@ -294,7 +310,7 @@ function tileInterpreter(tilemap) {
     return new_tilemap;
 }
 
-function moveTiles(map,move_cmd) {
+function moveTiles(map, move_cmd) {
 
     for (let i in move_cmd) {
         console.log("issued a move: " + move_cmd[i])
@@ -304,22 +320,36 @@ function moveTiles(map,move_cmd) {
 
 function singleMove(map, x, y, dir) {
     let tile = map[y][x]
-    let specialid = tile.props.id
+    
+    if (tile == "S" || tile == "" || tile == " ") {
+        console.log("-")
+        console.log("Something hella wrong in single Move")
+        console.log(map)
+        console.log(tile)
+        console.log("Most likely caused by a missing entity map")
+        console.log("-")
+        return null
+    }
+
+    let specialid =""
     switch (dir) {
         case "N":
             if (y == 0) { break; }
+            specialid = tile.props.id
             if (specialid == "player") { tile = tileImage(spr_player_n, "player") }
             map[y - 1][x] = tile
             map[y][x] = " "
             break;
 
         case "S":
+            specialid = tile.props.id
             if (specialid == "player") { tile = tileImage(spr_player_s, "player") }
             map[y + 1][x] = tile
             map[y][x] = " "
             break;
 
         case "E":
+            specialid = tile.props.id
             if (specialid == "player") { tile = tileImage(spr_player_e, "player") }
             map[y][x + 1] = tile
             map[y][x] = " "
@@ -327,6 +357,7 @@ function singleMove(map, x, y, dir) {
             break;
         case "W":
             if (x == 0) { break; }
+            specialid = tile.props.id
             if (specialid == "player") { tile = tileImage(spr_player_w, "player") }
             map[y][x - 1] = tile
             map[y][x] = " "
@@ -344,16 +375,13 @@ class TileMap extends React.Component {
             tile_map: this.props.map,
         }
     }
-  
+
     render() {
-      
+
         let content = [];
-        const { tile_map } = this.state;
+        let { tile_map } = this.state;
 
         tileInterpreter(tile_map)
-
-        //console.log("Lmao")
-        //console.log(tile_map)
 
         for (let y in tile_map) {
             for (let x in tile_map[y]) {
@@ -458,17 +486,19 @@ class Game extends React.Component {
             new_level: true,
             new_move: true,
             exit_found: false,
+            canMove : true,
 
             current_level: 0,
-            current_background: null,
-            current_entities: null,
+            current_background: [],
+            current_entities: [],
 
             layer_background: null,
             layer_entity: null
 
         }
     }
-
+    GameBackground_height = 0
+    GameBackground_width = 0
     move_cmd = []
     move_plr_cmd = []
     move_box_cmd = []
@@ -479,7 +509,7 @@ class Game extends React.Component {
         //console.log(this.state.current_background)
         //console.log(this.state.current_entities)
 
-        if (this.state.current_background[y][x] == 0 ) {
+        if (this.state.current_background[y][x] == 0) {
             return true
         }
 
@@ -517,7 +547,10 @@ class Game extends React.Component {
                 default:
                     break;
             }
-
+            if (this.state.current_entities[y][x].props.id == "exit") {
+                console.log("collision : exit")
+                return false
+            }
             if (this.state.current_background[y][x].props.id == "solid") {
                 console.log("collision : unmovable")
                 return false
@@ -556,6 +589,10 @@ class Game extends React.Component {
 
     changeXY(x, y) {
 
+        if (this.state.canMove) { 
+
+            this.setState({canMove:false})
+
         let dir = ""
 
         if (x == -1) { dir = "W" }
@@ -572,89 +609,176 @@ class Game extends React.Component {
         this.move_box_cmd.pop()
         this.move_box_cmd.pop()
 
-        this.move_plr_cmd.push([this.state.player_position[0], this.state.player_position[1], dir])
+        
 
         x = this.state.player_position[0] + x
         y = this.state.player_position[1] + y
 
-        if (this.checkCollision( x, y, dir)) {
+        if (this.checkCollision(x, y, dir)) {
+
+            this.move_plr_cmd.push([this.state.player_position[0], this.state.player_position[1], dir])
 
             this.setState({ player_position: [x, y] });
             console.log("Player postion:" + this.state.player_position)
             console.log("Move List:" + this.move_plr_cmd)
 
         }
+        }  
 
-        this.state.new_move = true
+        this.setState({ new_move: true })
+    }
+
+    functionOne(time) {
+    return new Promise((resolve, reject) => {
+            setTimeout(
+                () => {
+                    console.log("done")
+
+                    resolve();
+                }, time
+            )
+        })
+    }
+
+    state_exit_found(time) {
+        return new Promise((resolve, reject) => {
+            setTimeout(
+                () => {
+                    if (this.state.exit_found) {
+
+                        this.setState({ current_level: this.state.current_level + 1 })
+                        this.setState({ new_level: true })
+                        this.setState({ new_move: true })
+
+                        this.setState({ layer_background: null, layer_entity: null });
+
+                        this.setState({ current_entities: [], current_background: [] });
+
+                        this.setState({ player_position: [0, 0] });
+
+
+                        this.move_cmd = []
+                        this.move_plr_cmd = []
+                        this.move_box_cmd = []
+
+                        console.log("We are changing levels")
+                        this.setState({ exit_found: false })
+                    }
+                    console.log("exit found processed")
+                    resolve();
+                }, time
+            )
+        })
+    }
+
+    state_new_level(time) {
+        return new Promise((resolve, reject) => {
+            setTimeout(
+                () => {
+                    if (this.state.new_level) {
+
+                        this.state.current_entities = level_entity[this.state.current_level]
+                        this.state.current_background = level_background[this.state.current_level]
+
+                        let starter_pos = this.state.current_entities
+
+                        for (let y in starter_pos) {
+                            for (let x in starter_pos[y]) {
+                                if (starter_pos[y][x] == "S") {
+                                    console.log("Start position found! " + x + " " + y)
+                                    this.state.player_position = [parseInt(x), parseInt(y)]
+                                    console.log(this.state.player_position)
+                                    break;
+                                }
+                            }
+                        }
+
+                        this.setState({ layer_background: < TileMap map={this.state.current_background} /> });
+                        this.setState({ layer_entity: < TileMap map={this.state.current_entities} /> });
+
+
+                        this.setState({ new_level: false })
+
+                        //console.log("Level")
+                        //console.log("State new_level set to " + this.state.new_level)
+                        //console.log("State new_move set to " + this.state.new_move)
+                    }
+                    console.log("new level processed")
+                    resolve();
+                }, time
+            )
+        })
+    }
+
+    state_new_move(time) {
+        return new Promise((resolve, reject) => {
+            setTimeout(
+                () => {
+                    if (this.state.new_move) {
+
+                        for (let i in this.move_box_cmd) {
+                            this.move_plr_cmd.push(this.move_box_cmd[i])
+                            this.move_plr_cmd.reverse()
+                        }
+
+                        moveTiles(this.state.current_entities, this.move_plr_cmd, this.state.current_background, this.state.player_position)
+
+                        this.setState({ layer_entity: <TileMap map={this.state.current_entities} /> });
+
+                        this.setState({ new_move: false })
+
+                        //console.log("Move")
+                        //console.log("State new_level set to " + this.state.new_level)
+                        //console.log("State new_move set to " + this.state.new_move)
+
+                    }
+                    console.log("new move processed")
+                    resolve();
+                }, time
+            )
+        })
     }
 
     render() {
-        
         if (this.state.exit_found) {
+            this.state_exit_found(500).then(res => {
 
-            this.setState({ current_level: this.state.current_level + 1 })
-            this.setState({ new_level: true })
-            this.setState({ new_move: true })
 
-            this.setState({ layer_background: null, layer_entity: null });
+                if (this.state.new_level) {
+                    this.state_new_level(50).then(res => {
 
-            this.setState({ current_entities: null, current_background: null });
-
-            this.setState({ player_position: [0, 0] });
-
-            
-            this.move_cmd = []
-            this.move_plr_cmd = []
-            this.move_box_cmd = []
-
-            console.log("We are changing levels")
-            this.setState({ exit_found: false })
-        }
-
-        if (this.state.new_level) {
-            
-            this.state.current_entities = level_entity[this.state.current_level]
-            this.state.current_background = level_background[this.state.current_level]           
-
-            let starter_pos = this.state.current_entities
-
-            for (let y in starter_pos) {
-                for (let x in starter_pos[y]) {
-                    if (starter_pos[y][x] == "S") {
-                        console.log("Start position found! " + x + " " + y)
-                        this.state.player_position = [parseInt(x), parseInt(y)]
-                        console.log(this.state.player_position)
-                        break;
-                    }
+                        this.state_new_move(50).then(res => {
+                            this.setState({ canMove: true })
+                        })
+                    })
+                } else {
+                    this.state_new_move(50).then(res => {
+                        this.setState({ canMove: true })
+                    })
                 }
+            })
+        } else {
+            if (this.state.new_level) {
+                this.state_new_level(50).then(res => {
+
+                    this.state_new_move(50).then(res => {
+                        this.setState({ canMove: true })
+                    })
+                })
+            } else {
+                this.state_new_move(50).then(res => {
+                    this.setState({ canMove: true })
+                })
             }
-
-            this.setState({ layer_background: < TileMap map={this.state.current_background} /> });          
-
-            this.setState({ new_level: false })
         }
-        if (this.state.new_move && this.state.layer_background != null && this.state.current_entities != null) {
 
-            for (let i in this.move_box_cmd) {
-                this.move_plr_cmd.push(this.move_box_cmd[i])
-                this.move_plr_cmd.reverse()
-            }
-
-            moveTiles(this.state.current_entities, this.move_plr_cmd, this.state.current_background, this.state.player_position)
-
-            this.setState({ layer_entity: <TileMap map={this.state.current_entities} /> });
-
-            this.setState({ new_move: false })
-
-        }
-        
-        let GameBackground_width = (this.state.current_background.length * 32) + "px"
-        let GameBackground_height = (this.state.current_background.length * 32 + 96) + "px"
+        this.GameBackground_width = (level_background[this.state.current_level].length * 32+64) + "px"
+        this.GameBackground_height = (this.state.current_background.length * 32 + 96) + "px"
 
         let controlSchemeStyle = {
-            "position": "fixed",
-            "top": (this.state.current_background.length * 32 + 96 + 32) + "px",
-            "left": (this.state.current_background.length * 32) / 2 - 80 + "px",
+            "position": "fixed",        
+            "top": (this.state.current_entities.length * 32 + 96 + 32) + "px",
+            "left": (level_background[this.state.current_level].length * 32) / 2 - 48 + "px",
 
             "overflowClipMargin": "0px",
             "overflow": "hidden",
@@ -662,15 +786,12 @@ class Game extends React.Component {
             "zIndex": " 1",
         }
 
-        console.log("==========")
-        console.log(this.state.current_entities)
-        console.log(this.state.current_background)
-        console.log("==========")
+        
 
         return (
             <div>
                 <div id="board">
-                    <GameBackground width={GameBackground_width} height={GameBackground_height} level={this.state.current_level} />
+                    <GameBackground width={this.GameBackground_width} height={this.GameBackground_height} level={this.state.current_level} />
                     <div id="layer_background">
                         {this.state.layer_background}
                     </div>
