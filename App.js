@@ -45,37 +45,72 @@ import spr_arrow_left from './graphics/arrow_left.png'
 import spr_arrow_right from './graphics/arrow_right.png'
 import spr_arrow_down from './graphics/arrow_down.png'
 
+import background_mountains_dawn from './graphics/background_mountains_dawn.png'
+import background_mountains_day from './graphics/background_mountains_day.png'
 import background_mountains_dusk from './graphics/background_mountains_dusk.png'
+import background_mountains_night from './graphics/background_mountains_night.png'
 
-const levels = [
+const level_background = [
     [
         ["1", "3", "3", "3", "3", "3", "3", "3", "1"],
         ["2", "0", "0", "0", "0", "0", "0", "0", "2"],
-        ["2", "0", "2", "B", "3", "3", "3", "0", "2"],
-        ["2", "E", "2", "0", "0", "0", "0", "0", "2"],
+        ["2", "0", "2", "0", "3", "3", "3", "0", "2"],
         ["2", "0", "2", "0", "0", "0", "0", "0", "2"],
-        ["2", "0", "0", "B", "3", "3", "3", "0", "2"],
+        ["2", "0", "2", "0", "0", "0", "0", "0", "2"],
+        ["2", "0", "0", "0", "3", "3", "3", "0", "2"],
         ["2", "0", "0", "0", "0", "0", "0", "0", "2"],
-        ["1", "3", "4", "0", "B", "0", "4", "3", "1"],
-        ["1", "1", "2", "0", "S", "0", "2", "3", "1"],
+        ["1", "3", "4", "0", "0", "0", "4", "3", "1"],
+        ["1", "1", "2", "0", "0", "0", "2", "3", "1"],
         ["1", "1", "2", "0", "0", "0", "2", "0", "2"],
-        ["1", "1", "1", "3", "3", "3", "1", "3", "1"],
+        ["1", "1", "1", "3", "3", "3", "1", "3", "1"]
     ],
     [
         ["1", "3", "3", "3", "1"],
         ["2", "0", "0", "0", "2"],
-        ["2", "E", "0", "0", "2"],
-        ["2", "0", "B", "0", "2"],
-        ["2", "0", "B", "0", "2"],
         ["2", "0", "0", "0", "2"],
-        ["2", "0", "S", "0", "2"],
         ["2", "0", "0", "0", "2"],
-        ["1", "3", "3", "3", "1"],
+        ["2", "0", "0", "0", "2"],
+        ["2", "0", "0", "0", "2"],
+        ["2", "0", "0", "0", "2"],
+        ["2", "0", "0", "0", "2"],
+        ["1", "3", "3", "3", "1"]
     ],
     [
         ["1", "3", "1"],
-        ["2", "S", "2"],
-        ["1", "3", "1"],
+        ["2", "0", "2"],
+        ["1", "3", "1"]
+    ]
+]
+
+const level_entity = [
+    [
+        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", "B", " ", " ", " ", " ", " "],
+        [" ", "E", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", "B", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", "B", " ", " ", " ", " "],
+        [" ", " ", " ", " ", "S", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " "],
+    ],
+    [
+        [" ", " ", " ", " ", " "],
+        [" ", " ", "E", " ", " "],
+        [" ", " ", " ", " ", " "],
+        [" ", " ", "B", " ", " "],
+        [" ", " ", "B", " ", " "],
+        [" ", " ", " ", " ", " "],
+        [" ", " ", "S", " ", " "],
+        [" ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " "],
+    ],
+    [
+        [" ", " ", " "],
+        [" ", "S", " "],
+        [" ", " ", " "],
     ]
 ]
 /*
@@ -90,9 +125,9 @@ function functionOne(testInput) {
     });
 };*/
 
-function tileImage(graphic, id="") {
+function tileImage(graphic, id = "") {
 
-    return (<img className="tile_img" id={id} src={graphic }/>)
+    return (<img className="tile_img" id={id} src={graphic} />)
 }
 
 function tileInterpreter(tilemap) {
@@ -101,162 +136,205 @@ function tileInterpreter(tilemap) {
     let new_tilemap = tilemap
     let maxY = tilemap.length
 
-        for (let y in tilemap) {
-            for (let x in tilemap[y]) {
-                let tile = tilemap[y][x]
+    for (let y in tilemap) {
+        for (let x in tilemap[y]) {
+            let tile = tilemap[y][x]
 
-                if (tile == 4) {
+            if (tile == 4) {
 
 
-                    if (tilemap[y][x - 1] == 3 && tilemap[y][(parseInt(x) + 1)] == 0) {
-                        if (tilemap[(parseInt(y) + 1)][x] == 0) {
-                            new_tilemap[y][x] = tileImage(spr_border_corner_right_bottom, "solid")
-                        } else {
-                            new_tilemap[y][x] = tileImage(spr_border_corner_right, "solid")
-                        }
-
+                if (tilemap[y][x - 1] == 3 && tilemap[y][(parseInt(x) + 1)] == 0) {
+                    if (tilemap[(parseInt(y) + 1)][x] == 0) {
+                        new_tilemap[y][x] = tileImage(spr_border_corner_right_bottom, "solid")
+                    } else {
+                        new_tilemap[y][x] = tileImage(spr_border_corner_right, "solid")
                     }
-                    if (tilemap[y][x - 1] == 0 && tilemap[y][(parseInt(x) + 1)] == 3) {
-                        if (tilemap[(parseInt(y) + 1)][x] == 0) {
-                            new_tilemap[y][x] = tileImage(spr_border_corner_left_bottom, "solid")
-                        } else {
-                            new_tilemap[y][x] = tileImage(spr_border_corner_left, "solid")
-                        }
+
+                }
+                if (tilemap[y][x - 1] == 0 && tilemap[y][(parseInt(x) + 1)] == 3) {
+                    if (tilemap[(parseInt(y) + 1)][x] == 0) {
+                        new_tilemap[y][x] = tileImage(spr_border_corner_left_bottom, "solid")
+                    } else {
+                        new_tilemap[y][x] = tileImage(spr_border_corner_left, "solid")
                     }
                 }
             }
         }
+    }
 
-        for (let y in tilemap) {
-            for (let x in tilemap[y]) {
-                let tile = tilemap[y][x]
+    for (let y in tilemap) {
+        for (let x in tilemap[y]) {
+            let tile = tilemap[y][x]
 
-                if (tile == 2) {
-                    if (tilemap[y][(parseInt(x) + 1)] == 0 && tilemap[y][(parseInt(x) - 1)] == 0) {
+            if (tile == 2) {
+                if (tilemap[y][(parseInt(x) + 1)] == 0 && tilemap[y][(parseInt(x) - 1)] == 0) {
 
-                        if (tilemap[(parseInt(y) + 1)][x] == 0) {
-                            new_tilemap[y][x] = tileImage(spr_border_cavity_vertical_bottom, "solid")
-                        } else
-                            if (tilemap[y - 1][x] == 0) {
-                                new_tilemap[y][x] = tileImage(spr_border_cavity_vertical_top, "solid")
-                            } else {
-                                new_tilemap[y][x] = tileImage(spr_border_cavity_vertical, "solid")
-                            }
-                    } else {
-                        if (tilemap[y][(parseInt(x) + 1)] == 0) {
-                            new_tilemap[y][x] = tileImage(spr_border_left, "solid")
+                    if (tilemap[(parseInt(y) + 1)][x] == 0) {
+                        new_tilemap[y][x] = tileImage(spr_border_cavity_vertical_bottom, "solid")
+                    } else
+                        if (tilemap[y - 1][x] == 0) {
+                            new_tilemap[y][x] = tileImage(spr_border_cavity_vertical_top, "solid")
+                        } else {
+                            new_tilemap[y][x] = tileImage(spr_border_cavity_vertical, "solid")
                         }
-                        if (tilemap[y][x - 1] == 0) {
-                            new_tilemap[y][x] = tileImage(spr_border_right, "solid")
-                        }
-                    }
-                    if (tilemap[y][x] == 2) {
+                } else {
+                    if (tilemap[y][(parseInt(x) + 1)] == 0) {
                         new_tilemap[y][x] = tileImage(spr_border_left, "solid")
                     }
-
+                    if (tilemap[y][x - 1] == 0) {
+                        new_tilemap[y][x] = tileImage(spr_border_right, "solid")
+                    }
                 }
+                if (tilemap[y][x] == 2) {
+                    new_tilemap[y][x] = tileImage(spr_border_left, "solid")
+                }
+
             }
         }
+    }
 
-        for (let y in tilemap) {
-            for (let x in tilemap[y]) {
-                let tile = tilemap[y][x]
+    for (let y in tilemap) {
+        for (let x in tilemap[y]) {
+            let tile = tilemap[y][x]
 
-                if (tile == 3) {
-                    if (y != 0 && y != (maxY - 1)) {
-                        if (tilemap[(parseInt(y) + 1)][x] == 0 && tilemap[y - 1][x] == 0) {
+            if (tile == 3) {
+                if (y != 0 && y != (maxY - 1)) {
+                    if (tilemap[(parseInt(y) + 1)][x] == 0 && tilemap[y - 1][x] == 0) {
 
-                            if (tilemap[y][(parseInt(x) + 1)] == 0) {
-                                new_tilemap[y][x] = tileImage(spr_border_cavity_horizontal_right, "solid")
-                            } else
-                                if (tilemap[y][x - 1] == 0) {
-                                    new_tilemap[y][x] = tileImage(spr_border_cavity_horizontal_left, "solid")
-                                } else {
-                                    new_tilemap[y][x] = tileImage(spr_border_cavity_horizontal, "solid")
-                                }
-                        }
-
-                    }
-                    if (y == 0) {
-                        new_tilemap[y][x] = tileImage(spr_border_top, "solid")
-                    }
-
-                    if (y == (maxY - 1)) {
-                        if (tilemap[y][x - 1] == 1 && tilemap[y][(parseInt(x) + 1)] == 1) {
-                            new_tilemap[y][x] = tileImage(spr_border_bottom_middle, "solid")
+                        if (tilemap[y][(parseInt(x) + 1)] == 0) {
+                            new_tilemap[y][x] = tileImage(spr_border_cavity_horizontal_right, "solid")
                         } else
+                            if (tilemap[y][x - 1] == 0) {
+                                new_tilemap[y][x] = tileImage(spr_border_cavity_horizontal_left, "solid")
+                            } else {
+                                new_tilemap[y][x] = tileImage(spr_border_cavity_horizontal, "solid")
+                            }
+                    }
 
+                }
+                if (y == 0) {
+                    new_tilemap[y][x] = tileImage(spr_border_top, "solid")
+                }
+
+                if (y == (maxY - 1)) {
+                    if (tilemap[y][x - 1] == 1 && tilemap[y][(parseInt(x) + 1)] == 1) {
+                        new_tilemap[y][x] = tileImage(spr_border_bottom_middle, "solid")
+                    } else
+
+                        if (tilemap[y][x - 1] == 1) {
+                            new_tilemap[y][x] = tileImage(spr_border_bottom_left, "solid")
+
+                        } else
+                            if (tilemap[y][(parseInt(x) + 1)] == 1) {
+                                new_tilemap[y][x] = tileImage(spr_border_bottom_right, "solid")
+                            } else {
+                                new_tilemap[y][x] = tileImage(spr_border_bottom, "solid")
+                            }
+                } else if (y != 0 && tilemap[y - 1][x] == 0) {
+                    if (!(tilemap[y - 1][x] == 0)) { new_tilemap[y][x] = tileImage(spr_border_bottom, "solid") } else {
+                        if (tilemap[y][x] == 3) {
                             if (tilemap[y][x - 1] == 1) {
                                 new_tilemap[y][x] = tileImage(spr_border_bottom_left, "solid")
-
-                            } else
-                                if (tilemap[y][(parseInt(x) + 1)] == 1) {
-                                    new_tilemap[y][x] = tileImage(spr_border_bottom_right, "solid")
-                                } else {
-                                    new_tilemap[y][x] = tileImage(spr_border_bottom, "solid")
-                                }
-                    } else if (y!=0 && tilemap[y - 1][x] == 0) {
-                        if (!(tilemap[y - 1][x] == 0)) { new_tilemap[y][x] = tileImage(spr_border_bottom, "solid") } else {
-                            if (tilemap[y][x] == 3) {
-                                if (tilemap[y][x - 1] == 1) {
-                                    new_tilemap[y][x] = tileImage(spr_border_bottom_left, "solid")
-                                }
-                                if (tilemap[y][(parseInt(x) + 1)] == 1) {
-                                    new_tilemap[y][x] = tileImage(spr_border_bottom_right, "solid")
-                                }
+                            }
+                            if (tilemap[y][(parseInt(x) + 1)] == 1) {
+                                new_tilemap[y][x] = tileImage(spr_border_bottom_right, "solid")
                             }
                         }
-
-                    } else if (tilemap[(parseInt(y) + 1)][x] == 0) {
-                        new_tilemap[y][x] = tileImage(spr_border_top, "solid")
                     }
+
+                } else if (tilemap[(parseInt(y) + 1)][x] == 0) {
+                    new_tilemap[y][x] = tileImage(spr_border_top, "solid")
                 }
+            }
+
+        }
+    }
+
+    for (let y in tilemap) {
+        for (let x in tilemap[y]) {
+            if (tilemap[y][x] == "1") {
+                new_tilemap[y][x] = tileImage(spr_empty, "solid")
+            }
+            if (tilemap[y][x] == "0") {
+                new_tilemap[y][x] = tileImage(spr_ground)
+                const rand = Math.floor(1 + Math.random() * (30 - 1));
+                //console.log(rand)
+                if (rand == 13) { new_tilemap[y][x] = tileImage(spr_ground_a) }
+                if (rand == 12) { new_tilemap[y][x] = tileImage(spr_ground_b) }
+                if (rand == 11) { new_tilemap[y][x] = tileImage(spr_ground_c) }
 
             }
         }
+    }
 
-        for (let y in tilemap) {
-            for (let x in tilemap[y]) {
-                if (tilemap[y][x] == "1") {
-                    new_tilemap[y][x] = tileImage(spr_empty, "solid")
-                }
-                if (tilemap[y][x] == "0") {
-                    new_tilemap[y][x] = tileImage(spr_ground)
-                    const rand = Math.floor(1 + Math.random() * (30 - 1));
-                    //console.log(rand)
-                    if (rand == 13) { new_tilemap[y][x] = tileImage(spr_ground_a) }
-                    if (rand == 12) { new_tilemap[y][x] = tileImage(spr_ground_b) }
-                    if (rand == 11) { new_tilemap[y][x] = tileImage(spr_ground_c) }
 
-                }
+    for (let y in tilemap) {
+        for (let x in tilemap[y]) {//
+            if (tilemap[y][x] == " ") {
+                new_tilemap[y][x] = tileImage(spr_empty)
+            }
+            if (tilemap[y][x] == "B") {
+
+                const rand = Math.floor(1 + Math.random() * (3 - 1));
+                //console.log(rand)
+                if (rand == 1) { new_tilemap[y][x] = tileImage(spr_box_a, "box") }
+                if (rand == 2) { new_tilemap[y][x] = tileImage(spr_box_b, "box") }
+                if (rand == 3) { new_tilemap[y][x] = tileImage(spr_box_c, "box") }
+            }
+            if (tilemap[y][x] == "S") {
+                new_tilemap[y][x] = tileImage(spr_player_s, "player")
+            }
+            if (tilemap[y][x] == "E") {
+                new_tilemap[y][x] = tileImage(spr_ladder, "exit")
             }
         }
-
-
-        for (let y in tilemap) {
-            for (let x in tilemap[y]) {//
-                if (tilemap[y][x] == " ") {
-                    new_tilemap[y][x] = tileImage(spr_empty)
-                }
-                if (tilemap[y][x] == "B") {
-
-                    const rand = Math.floor(1 + Math.random() * (3 - 1));
-                    //console.log(rand)
-                    if (rand == 1) { new_tilemap[y][x] = tileImage(spr_box_a, "box") }
-                    if (rand == 2) { new_tilemap[y][x] = tileImage(spr_box_b, "box") }
-                    if (rand == 3) { new_tilemap[y][x] = tileImage(spr_box_c, "box") }
-                }
-                if (tilemap[y][x] == "S") {
-                    new_tilemap[y][x] = tileImage(spr_player_s, "player")
-                }
-                if (tilemap[y][x] == "E") {
-                    new_tilemap[y][x] = tileImage(spr_ladder, "exit")
-                }
-            }
-        }
+    }
     tilemap = new_tilemap
     console.log("processed tile map")
     return new_tilemap;
+}
+
+function moveTiles(map,move_cmd) {
+
+    for (let i in move_cmd) {
+        console.log("issued a move: " + move_cmd[i])
+        singleMove(map, move_cmd[i][0], move_cmd[i][1], move_cmd[i][2])
+    }
+}
+
+function singleMove(map, x, y, dir) {
+    let tile = map[y][x]
+    let specialid = tile.props.id
+    switch (dir) {
+        case "N":
+            if (y == 0) { break; }
+            if (specialid == "player") { tile = tileImage(spr_player_n, "player") }
+            map[y - 1][x] = tile
+            map[y][x] = " "
+            break;
+
+        case "S":
+            if (specialid == "player") { tile = tileImage(spr_player_s, "player") }
+            map[y + 1][x] = tile
+            map[y][x] = " "
+            break;
+
+        case "E":
+            if (specialid == "player") { tile = tileImage(spr_player_e, "player") }
+            map[y][x + 1] = tile
+            map[y][x] = " "
+
+            break;
+        case "W":
+            if (x == 0) { break; }
+            if (specialid == "player") { tile = tileImage(spr_player_w, "player") }
+            map[y][x - 1] = tile
+            map[y][x] = " "
+            break;
+
+        default:
+            break;
+    }
 }
 
 class TileMap extends React.Component {
@@ -264,71 +342,28 @@ class TileMap extends React.Component {
         super(props);
         this.state = {
             tile_map: this.props.map,
-            move_cmd: this.props.move,
-            plr_xy: this.props.xy,
         }
     }
-    
-    move(map, x, y, dir) {
-        let tile = map[y][x]
-        let specialid =tile.props.id
-        switch (dir) {
-            case "N":
-                if (y == 0) { break; }
-                    if (specialid == "player") { tile = tileImage(spr_player_n , "player") }
-                    map[y - 1][x] = tile
-                    map[y][x] = " "
-                break;
-
-            case "S":            
-                    if (specialid == "player") { tile = tileImage(spr_player_s, "player") }
-                    map[y + 1][x] = tile
-                    map[y][x] = " "
-                break;
-
-            case "E":    
-                if (specialid == "player") { tile = tileImage(spr_player_e, "player") }
-                    map[y][x + 1] = tile
-                    map[y][x] = " "
-
-                break;
-            case "W":
-                if (x == 0) { break; }
-                if (specialid == "player") { tile = tileImage(spr_player_w, "player") }
-                    map[y][x - 1] = tile
-                    map[y][x] = " "
-                break;
-
-            default:
-                return null;
-        }
-    }
-
-
+  
     render() {
-
-        const { move_cmd } = this.state;
+      
+        let content = [];
         const { tile_map } = this.state;
 
-        for (let i in move_cmd) {
-            console.log("issued a move: " + move_cmd[i])
-            this.move(tile_map, move_cmd[i][0], move_cmd[i][1], move_cmd[i][2])
-        }
-        
-        let content = [];
-       
         tileInterpreter(tile_map)
+
+        //console.log("Lmao")
         //console.log(tile_map)
 
         for (let y in tile_map) {
             for (let x in tile_map[y]) {
                 if (tile_map[y][x] == "S") {
                     this.lastX = x
-                    this.lastY = y                   
+                    this.lastY = y
                 }
             }
         }
-        
+
         for (let y in tile_map) {
             let tile_map_row = [];
 
@@ -342,7 +377,7 @@ class TileMap extends React.Component {
         return (
             <div>
                 <table id="tile_table" border="0" cellPadding="0" cellSpacing="0">
-                        {content}
+                    {content}
                 </table>
             </div>
 
@@ -356,75 +391,55 @@ class GameBackground extends React.Component {
         super(props);
         this.state = {
             width: this.props.width,
-            height: this.props.height
+            height: this.props.height,
+            level: this.props.height
         }
     }
 
     render() {
+
+        let background = background_mountains_dusk
+        switch (this.props.level) {
+            case 0:
+                background = background_mountains_dawn
+                break;
+            case 1:
+                background = background_mountains_day
+                break;
+            case 2:
+                background = background_mountains_dusk
+                break;
+            case 3:
+                background = background_mountains_night
+                break;
+            default:
+                break;
+        }
 
         let gameBackgroundStyle = {
             "position": "fixed",
             "top": "0px",
             "left": "0px",
 
-            "overflow-clip-margin": "0px",
+            "overflowClipMargin": "0px",
             "overflow": "hidden",
 
-            "z-index": " -1",
+            "zIndex": " -1",
 
             "width": this.props.width,
             "height": this.props.height,
 
         }
 
-        let content =  < img className="backgroundImage" src = { background_mountains_dusk } />
+        let content = < img className="backgroundImage" src={background} />
 
         return (
-            <div id="gamebackground" style={gameBackgroundStyle } >
+            <div id="gamebackground" style={gameBackgroundStyle} >
                 {content}
             </div>
         )
     }
 }
-
-function EntitiesCollision(level) {
-
-    const a_collision = new Array
-    const a_entities = new Array
-
-
-    console.log("1")
-    console.log(a_collision)
-    console.log(a_entities)
-
-    for (let y in levels[level]) {
-        const colrow = new Array
-        const entrow = new Array
-
-        for (let x in levels[level][y]) {
-            let tile = levels[level][y][x]
-            //console.log("t " + tile)
-            if (tile >= 0) {
-                colrow.push(tile)
-                entrow.push(" ")
-            } else {
-                colrow.push(0)
-                entrow.push(tile)
-            }
-        }
-
-        a_collision.push(colrow)
-        a_entities.push(entrow)
-    }
-    console.log("2")
-    console.log(a_collision)
-    console.log(a_entities)
-
-    console.log("3")
-    console.log(levels[level])
-    return [a_collision, a_entities]
-}
-
 
 function MoveButton(props) {
     return (
@@ -449,7 +464,7 @@ class Game extends React.Component {
             current_entities: null,
 
             layer_background: null,
-            layer_entity: null,
+            layer_entity: null
 
         }
     }
@@ -457,37 +472,42 @@ class Game extends React.Component {
     move_cmd = []
     move_plr_cmd = []
     move_box_cmd = []
-    checkCollision(collision, x, y, dir) {
+    checkCollision(x, y, dir) {
 
-        if (this.state.current_background[y][x] == 0) {
+
+        //console.log("trolled")
+        //console.log(this.state.current_background)
+        //console.log(this.state.current_entities)
+
+        if (this.state.current_background[y][x] == 0 ) {
             return true
         }
 
-        if (this.state.current_entities[y][x].props.id == "exit" ) {
+        if (this.state.current_entities[y][x].props.id == "exit") {
 
             console.log("That's an exit!")
-            this.setState({exit_found:true})
+            this.setState({ exit_found: true })
             return false
         }
 
-        if (this.state.current_background[y][x].props.id =="solid") {
+        if (this.state.current_background[y][x].props.id == "solid") {
             console.log("collision : solid")
             return false
         }
-        if (this.state.current_entities[y][x].props.id=="box") {
+        if (this.state.current_entities[y][x].props.id == "box") {
             console.log("collision : box, checking")
 
-            switch (dir) { 
+            switch (dir) {
                 case "N":
-                    y=y-1
+                    y = y - 1
                     break;
 
                 case "S":
-                    y = y+1
+                    y = y + 1
                     break;
 
                 case "E":
-                    x=x+1
+                    x = x + 1
                     break;
 
                 case "W":
@@ -498,11 +518,11 @@ class Game extends React.Component {
                     break;
             }
 
-            if (this.state.current_background[y][x].props.id=="solid") {
+            if (this.state.current_background[y][x].props.id == "solid") {
                 console.log("collision : unmovable")
                 return false
             }
-            if (this.state.current_entities[y][x].props.id=="box") {
+            if (this.state.current_entities[y][x].props.id == "box") {
                 console.log("collision : second box")
                 return false
             }
@@ -528,7 +548,7 @@ class Game extends React.Component {
                     break;
             }
 
-            
+
             this.move_box_cmd.push([x, y, dir])
         }
         return true
@@ -543,7 +563,7 @@ class Game extends React.Component {
         if (y == -1) { dir = "N" }
         if (y == 1) { dir = "S" }
 
-        
+
         this.move_plr_cmd.pop()
         this.move_plr_cmd.pop()
         this.move_plr_cmd.pop()
@@ -557,69 +577,72 @@ class Game extends React.Component {
         x = this.state.player_position[0] + x
         y = this.state.player_position[1] + y
 
-        if (this.checkCollision(this.state.current_background, x, y,dir)) {
+        if (this.checkCollision( x, y, dir)) {
 
             this.setState({ player_position: [x, y] });
             console.log("Player postion:" + this.state.player_position)
             console.log("Move List:" + this.move_plr_cmd)
 
         }
-      
+
         this.state.new_move = true
     }
 
-
-    changeLevel(currentlevel) {
-
-        this.setState({ currentLevel: currentlevel })
-        this.setState({ new_level: true })
-        this.setState({ new_move: true })
-        this.setState({ exit_found: false })
-    }
-
     render() {
-
-        if (this.state.exit_found) {
-            this.changeLevel(0)
-                       
-        }
         
-        if (this.state.new_level) {     
+        if (this.state.exit_found) {
 
-            let ECResult = EntitiesCollision(0)
-         
-            this.state.current_entities = ECResult[1]
-            this.state.current_background = ECResult[0]
+            this.setState({ current_level: this.state.current_level + 1 })
+            this.setState({ new_level: true })
+            this.setState({ new_move: true })
+
+            this.setState({ layer_background: null, layer_entity: null });
+
+            this.setState({ current_entities: null, current_background: null });
+
+            this.setState({ player_position: [0, 0] });
+
+            
+            this.move_cmd = []
+            this.move_plr_cmd = []
+            this.move_box_cmd = []
+
+            console.log("We are changing levels")
+            this.setState({ exit_found: false })
+        }
+
+        if (this.state.new_level) {
+            
+            this.state.current_entities = level_entity[this.state.current_level]
+            this.state.current_background = level_background[this.state.current_level]           
 
             let starter_pos = this.state.current_entities
-
-            
-            
 
             for (let y in starter_pos) {
                 for (let x in starter_pos[y]) {
                     if (starter_pos[y][x] == "S") {
                         console.log("Start position found! " + x + " " + y)
                         this.state.player_position = [parseInt(x), parseInt(y)]
+                        console.log(this.state.player_position)
                         break;
                     }
                 }
             }
 
-            this.setState({ layer_background: < TileMap map={this.state.current_background} /> });               
+            this.setState({ layer_background: < TileMap map={this.state.current_background} /> });          
 
             this.setState({ new_level: false })
-            //this.setState({ new_level: true })
-
         }
-
-        if (this.state.new_move && this.state.layer_background != null) {
+        if (this.state.new_move && this.state.layer_background != null && this.state.current_entities != null) {
 
             for (let i in this.move_box_cmd) {
                 this.move_plr_cmd.push(this.move_box_cmd[i])
                 this.move_plr_cmd.reverse()
             }
-            this.setState({ layer_entity: <TileMap map={this.state.current_entities} move={this.move_plr_cmd} collision={this.state.current_background} xy={this.state.player_position} /> });
+
+            moveTiles(this.state.current_entities, this.move_plr_cmd, this.state.current_background, this.state.player_position)
+
+            this.setState({ layer_entity: <TileMap map={this.state.current_entities} /> });
 
             this.setState({ new_move: false })
 
@@ -633,28 +656,21 @@ class Game extends React.Component {
             "top": (this.state.current_background.length * 32 + 96 + 32) + "px",
             "left": (this.state.current_background.length * 32) / 2 - 80 + "px",
 
-            "overflow-clip-margin": "0px",
+            "overflowClipMargin": "0px",
             "overflow": "hidden",
 
-            "z-index": " 1",
+            "zIndex": " 1",
         }
 
-        /*console.log("=================================")
-        console.log(this.state.current_level)
-        console.log(this.state.layer_background)
-        console.log(this.state.layer_entity )
-        console.log("=================================")*/
+        console.log("==========")
+        console.log(this.state.current_entities)
+        console.log(this.state.current_background)
+        console.log("==========")
 
-        //this.setState({ layer_background: < TileMap map={this.state.current_background} /> });
-
-        //this.move_cmd = []//
-        //return (<div><TileMap map={levels[0]} /></div>)
-        //<div>{this.state.layer_entity}</div>/
-        
         return (
-            <div>              
+            <div>
                 <div id="board">
-                    <GameBackground width={GameBackground_width} height={GameBackground_height} />
+                    <GameBackground width={GameBackground_width} height={GameBackground_height} level={this.state.current_level} />
                     <div id="layer_background">
                         {this.state.layer_background}
                     </div>
@@ -664,7 +680,7 @@ class Game extends React.Component {
                     </div>
                 </div >
                 <div id="controlscheme" style={controlSchemeStyle}>
-                    <div id="dpad">                    
+                    <div id="dpad">
                         <table id="dpad_table" border="0" cellPadding="0" cellSpacing="0">
                             <tr>
                                 <th id="tile"></th>
@@ -683,11 +699,11 @@ class Game extends React.Component {
                             </tr>
                         </table>
                     </div>
-                    
+
                 </div>
                 {this.state.player_position}
             </div>
-            )
+        )
     }
 }
 
