@@ -44,6 +44,7 @@ import spr_arrow_up from './graphics/arrow_up.png'
 import spr_arrow_left from './graphics/arrow_left.png'
 import spr_arrow_right from './graphics/arrow_right.png'
 import spr_arrow_down from './graphics/arrow_down.png'
+import spr_button_reload from './graphics/reload.png'
 
 import background_mountains_dawn from './graphics/background_mountains_dawn.png'
 import background_mountains_day from './graphics/background_mountains_day.png'
@@ -52,6 +53,13 @@ import background_mountains_night from './graphics/background_mountains_night.pn
 
 //https://youtu.be/gI81fuLPz4A
 //Superfilm!
+
+const level_backgroundsex = [
+    [
+        ["1", "3", "3", "1"],
+        ["2", "0", "0", "1"],
+        ["2", "0", "0", "1"],
+    ]]
 
 const level_background = [
     [
@@ -165,9 +173,11 @@ function functionOne(testInput) {
 };
 */
 
+let hideincutscenestate = {
+    "visibility": "visible"
+}
 
-
-function tileImage(graphic, id = "") {
+function tileImage(graphic, id = "none") {
 
     return (<img className="tile_img" id={id} src={graphic} />)
 }
@@ -175,6 +185,9 @@ function tileImage(graphic, id = "") {
 function tileInterpreter(tilemap) {
 
     console.log("Interpreting tiles")
+    let bomb= Array.of(tilemap)[0]
+    console.log("BOO")
+    console.log(bomb)
     let new_tilemap = tilemap
     let maxY = tilemap.length
 
@@ -310,12 +323,12 @@ function tileInterpreter(tilemap) {
                 new_tilemap[y][x] = tileImage(spr_empty, "solid")
             }
             if (tilemap[y][x] == "0") {
-                new_tilemap[y][x] = tileImage(spr_ground)
+                new_tilemap[y][x] = tileImage(spr_ground, "none")
                 const rand = Math.floor(1 + Math.random() * (30 - 1));
                 //console.log(rand)
-                if (rand == 13) { new_tilemap[y][x] = tileImage(spr_ground_a) }
-                if (rand == 12) { new_tilemap[y][x] = tileImage(spr_ground_b) }
-                if (rand == 11) { new_tilemap[y][x] = tileImage(spr_ground_c) }
+                if (rand == 13) { new_tilemap[y][x] = tileImage(spr_ground_a, "none") }
+                if (rand == 12) { new_tilemap[y][x] = tileImage(spr_ground_b, "none") }
+                if (rand == 11) { new_tilemap[y][x] = tileImage(spr_ground_c, "none") }
 
             }
         }
@@ -343,7 +356,7 @@ function tileInterpreter(tilemap) {
             }
         }
     }
-    tilemap = new_tilemap
+    //tilemap = new_tilemap
     console.log("processed tile map")
     return new_tilemap;
 }
@@ -419,23 +432,28 @@ class TileMap extends React.Component {
         let content = [];
         let { tile_map } = this.state;
 
-        tileInterpreter(tile_map)
+        //let tile_map2=[]
+        //let tile_map2=tileInterpreter(Array.of(tile_map)[0])
+        let second_tile = Object.assign({}, level_backgroundsex[0])
+        console.log(second_tile)
+        let tile_map2 = tileInterpreter(second_tile)
+        console.log(second_tile)
 
-        for (let y in tile_map) {
-            for (let x in tile_map[y]) {
-                if (tile_map[y][x] == "S") {
+        for (let y in tile_map2) {
+            for (let x in tile_map2[y]) {
+                if (tile_map2[y][x] == "S") {
                     this.lastX = x
                     this.lastY = y
                 }
             }
         }
 
-        for (let y in tile_map) {
+        for (let y in tile_map2) {
             let tile_map_row = [];
 
-            for (let x in tile_map[y]) {
+            for (let x in tile_map2[y]) {
 
-                tile_map_row.push(<th >{tile_map[y][x]}</th>);
+                tile_map_row.push(<th >{tile_map2[y][x]}</th>);
             }
             content.push(<tr>{tile_map_row}</tr>)
         }
@@ -525,8 +543,10 @@ class Game extends React.Component {
             new_move: true,
             exit_found: false,
             canMove : true,
+            reload_level : false,
 
-            current_level: 2,
+            current_level: 1,
+            nextlevel : 2,
             current_background: [],
             current_entities: [],
 
@@ -535,11 +555,14 @@ class Game extends React.Component {
 
         }
     }
+
     GameBackground_height = 0
     GameBackground_width = 0
     move_cmd = []
     move_plr_cmd = []
     move_box_cmd = []
+    
+
     checkCollision(x, y, dir) {
 
 
@@ -666,7 +689,31 @@ class Game extends React.Component {
         this.setState({ new_move: true })
     }
 
-    functionOne(time) {
+    reloadLevel() {
+
+        this.setState({ nextlevel: this.state.nextlevel })
+
+        this.setState({ exit_found: true })
+        this.setState({ canMove: false })
+
+        setTimeout(
+            () => {
+                this.setState({ nextlevel: this.state.nextlevel -2})
+                this.setState({ exit_found: true })
+                
+                this.setState({ canMove: false })
+                console.log("ajajaj")
+            }, 600
+        )
+
+    }
+
+    reloadLevelB() {
+
+        this.setState({ reload_level: true })
+    }
+
+    /*functionOne(time) {
     return new Promise((resolve, reject) => {
             setTimeout(
                 () => {
@@ -676,17 +723,37 @@ class Game extends React.Component {
                 }, time
             )
         })
+    }*/
+
+    state_reload_level(time) {
+        return new Promise((resolve, reject) => {       
+            console.log("RELOADING!")
+            console.log("RELOADING!")
+            console.log("RELOADING!")
+            setTimeout(
+                () => {                  
+
+                    this.setState({ exit_found: true })
+                    this.setState({ nextlevel: this.state.current_level })
+                    this.setState({ reload_level: false })
+                    resolve();
+                    
+                }, time)         
+        })
     }
 
-    state_exit_found(time) {
+    state_exit_found(time,newlevel) {
         return new Promise((resolve, reject) => {
             setTimeout(
                 () => {
+                    
                     if (this.state.exit_found) {
 
-                        this.setState({ current_level: this.state.current_level + 1 })
+                        this.setState({ current_level: newlevel })
                         this.setState({ new_level: true })
                         this.setState({ new_move: true })
+
+                        this.setState({ nextlevel: newlevel + 1 })
 
                         this.setState({ layer_background: null, layer_entity: null });
 
@@ -715,10 +782,17 @@ class Game extends React.Component {
                 () => {
                     if (this.state.new_level) {
 
-                        this.state.current_entities = level_entity[this.state.current_level]
-                        this.state.current_background = level_background[this.state.current_level]
+                        console.log(level_entity)
 
-                        let starter_pos = this.state.current_entities
+                        this.state.current_entities = (Array.of(level_entity[this.state.current_level]))[0]
+                        this.state.current_background = (Array.of(level_background[this.state.current_level]))[0]
+
+                        let starter_pos = (Array.of(level_entity[this.state.current_level]))[0]
+
+                        console.log("huh")
+                        console.log(starter_pos)
+                        console.log(level_entity[this.state.current_level])
+                        console.log("huh")
 
                         for (let y in starter_pos) {
                             for (let x in starter_pos[y]) {
@@ -727,12 +801,23 @@ class Game extends React.Component {
                                     this.state.player_position = [parseInt(x), parseInt(y)]
                                     console.log(this.state.player_position)
                                     break;
+                                } else {
+                                    if (starter_pos[y][x].props != undefined) {
+                                        if (starter_pos[y][x].props.id != undefined) {
+                                            if (starter_pos[y][x].props.id == "player") {
+                                                console.log("Start position found, weirdly but works " + x + " " + y)
+                                                this.state.player_position = [parseInt(x), parseInt(y)]
+                                                console.log(this.state.player_position)
+                                                break;
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
 
-                        this.setState({ layer_background: < TileMap map={this.state.current_background} /> });
-                        this.setState({ layer_entity: < TileMap map={this.state.current_entities} /> });
+                        this.setState({ layer_background: < TileMap map={Array.of(this.state.current_background)[0]} /> });
+                        this.setState({ layer_entity: < TileMap map={Array.of(this.state.current_entities)[0]} /> });
 
 
                         this.setState({ new_level: false })
@@ -759,9 +844,9 @@ class Game extends React.Component {
                             this.move_plr_cmd.reverse()
                         }
 
-                        moveTiles(this.state.current_entities, this.move_plr_cmd, this.state.current_background, this.state.player_position)
+                        moveTiles(Array.of(this.state.current_entities)[0], this.move_plr_cmd, Array.of(this.state.current_background)[0], this.state.player_position)
 
-                        this.setState({ layer_entity: <TileMap map={this.state.current_entities} /> });
+                        this.setState({ layer_entity: <TileMap map={Array.of(this.state.current_entities)[0]} /> });
 
                         this.setState({ new_move: false })
 
@@ -778,10 +863,26 @@ class Game extends React.Component {
     }
 
     render() {
+      
         if (this.state.exit_found) {
-            this.state_exit_found(500).then(res => {
+            this.state_exit_found(100, this.state.nextlevel).then(res => {
 
 
+                if (this.state.new_level) {
+                    this.state_new_level(50).then(res => {
+
+                        this.state_new_move(50).then(res => {
+                            this.setState({ canMove: true })
+                        })
+                    })
+                } else {
+                    this.state_new_move(50).then(res => {
+                        this.setState({ canMove: true })
+                    })
+                }
+            })
+        } else if (this.state.reload_level) {
+            this.state_reload_level(100).then(res => {
                 if (this.state.new_level) {
                     this.state_new_level(50).then(res => {
 
@@ -824,13 +925,30 @@ class Game extends React.Component {
             "zIndex": " 1",
         }
 
+
+
+        if (!this.state.new_level) {
+            setTimeout(
+                () => {
+                    hideincutscenestate = {
+                        "visibility": "visible"
+                    }
+
+                }, 1000
+            )
+        } else {
+            hideincutscenestate = {
+                "visibility": "hidden"
+            }
+        } 
+
         //this.GameBackground_width
         //this.GameBackground_height
 
         return (
             <div>
                 <div id="board">
-                    <GameBackground width={this.GameBackground_width} height={this.GameBackground_height} level={this.state.current_level} />
+                    <div style={hideincutscenestate}><GameBackground width={this.GameBackground_width} height={this.GameBackground_height} level={this.state.current_level} /></div >
                     <div id="layer_background">
                         {this.state.layer_background}
                     </div>
@@ -839,6 +957,7 @@ class Game extends React.Component {
                         {this.state.layer_entity}
                     </div>
                 </div >
+                <div style={hideincutscenestate}>
                 <div id="controlscheme" style={controlSchemeStyle}>
                     <div id="dpad">
                         <table id="dpad_table" border="0" cellPadding="0" cellSpacing="0">
@@ -851,6 +970,7 @@ class Game extends React.Component {
                                 <th id="tile"><MoveButton onClick={() => this.changeXY(-1, 0)} value={tileImage(spr_arrow_left)}></MoveButton></th>
                                 <th id="tile"></th>
                                 <th id="tile"><MoveButton onClick={() => this.changeXY(1, 0)} value={tileImage(spr_arrow_right)}></MoveButton></th>
+                                <th id="tile"></th>
                             </tr>
                             <tr>
                                 <th id="tile"></th>
@@ -858,9 +978,12 @@ class Game extends React.Component {
                                 <th id="tile"></th>
                             </tr>
                         </table>
+                        <p></p>
+                        <MoveButton onClick={() => this.reloadLevelB()} value={tileImage(spr_button_reload)}></MoveButton>
                     </div>
-
-                </div>               
+                    {this.state.player_position}
+                    </div>   
+                    </div>
             </div>
         )
     }
