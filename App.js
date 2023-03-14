@@ -54,13 +54,6 @@ import background_mountains_night from './graphics/background_mountains_night.pn
 //https://youtu.be/gI81fuLPz4A
 //Superfilm!
 
-const level_backgroundsex = [
-    [
-        ["1", "3", "3", "1"],
-        ["2", "0", "0", "1"],
-        ["2", "0", "0", "1"],
-    ]]
-
 const level_background = [
     [
         ["1", "3", "3", "3", "1", "1", "1", "1", "1", "1"],
@@ -185,10 +178,7 @@ function tileImage(graphic, id = "none") {
 function tileInterpreter(tilemap) {
 
     console.log("Interpreting tiles")
-    let bomb= Array.of(tilemap)[0]
-    console.log("BOO")
-    console.log(bomb)
-    let new_tilemap = tilemap
+    let new_tilemap =tilemap
     let maxY = tilemap.length
 
     for (let y in tilemap) {
@@ -432,28 +422,23 @@ class TileMap extends React.Component {
         let content = [];
         let { tile_map } = this.state;
 
-        //let tile_map2=[]
-        //let tile_map2=tileInterpreter(Array.of(tile_map)[0])
-        let second_tile = Object.assign({}, level_backgroundsex[0])
-        console.log(second_tile)
-        let tile_map2 = tileInterpreter(second_tile)
-        console.log(second_tile)
+        tileInterpreter(Array.of(tile_map)[0])
 
-        for (let y in tile_map2) {
-            for (let x in tile_map2[y]) {
-                if (tile_map2[y][x] == "S") {
+        for (let y in tile_map) {
+            for (let x in tile_map[y]) {
+                if (tile_map[y][x] == "S") {
                     this.lastX = x
                     this.lastY = y
                 }
             }
         }
 
-        for (let y in tile_map2) {
+        for (let y in tile_map) {
             let tile_map_row = [];
 
-            for (let x in tile_map2[y]) {
+            for (let x in tile_map[y]) {
 
-                tile_map_row.push(<th >{tile_map2[y][x]}</th>);
+                tile_map_row.push(<th >{tile_map[y][x]}</th>);
             }
             content.push(<tr>{tile_map_row}</tr>)
         }
@@ -784,15 +769,11 @@ class Game extends React.Component {
 
                         console.log(level_entity)
 
-                        this.state.current_entities = (Array.of(level_entity[this.state.current_level]))[0]
-                        this.state.current_background = (Array.of(level_background[this.state.current_level]))[0]
+                        this.state.current_entities = { ...level_entity[this.state.current_level] }
+                        this.state.current_background = level_background[this.state.current_level]
 
-                        let starter_pos = (Array.of(level_entity[this.state.current_level]))[0]
+                        let starter_pos = {...level_entity[this.state.current_level]}
 
-                        console.log("huh")
-                        console.log(starter_pos)
-                        console.log(level_entity[this.state.current_level])
-                        console.log("huh")
 
                         for (let y in starter_pos) {
                             for (let x in starter_pos[y]) {
