@@ -72,6 +72,8 @@ import title_level_7 from './graphics/title_level_7.gif'
 import title_level_8 from './graphics/title_level_8.gif'
 import title_level_9 from './graphics/title_level_9.gif'
 
+import title_game from './graphics/title.png'
+
 //https://youtu.be/gI81fuLPz4A
 //Superfilm!
 
@@ -210,10 +212,6 @@ function functionOne(testInput) {
     });
 };
 */
-
-let hideincutscenestate = {
-    "visibility": "visible"
-}
 
 function tileImage(graphic, id = "none") {
 
@@ -975,19 +973,24 @@ class Game extends React.Component {
         })
     }
 
+    hideincutscenestate = {}
+
     render() {
 
         if (!this.state.new_level) {
+            if (this.hideincutscenestate.visibility == "hidden") {
             setTimeout(
                 () => {
-                    hideincutscenestate = {
-                        "visibility": "visible"
-                    }
-
+                    
+                        this.hideincutscenestate = {
+                            "visibility": "visible"
+                        }
+                                   
                 }, 3000
-            )
+                )
+            }
         } else {
-            hideincutscenestate = {
+            this.hideincutscenestate = {
                 "visibility": "hidden"
             }
         }
@@ -995,7 +998,6 @@ class Game extends React.Component {
 
         if (this.state.exit_found) {
             this.state_exit_found(100, this.state.nextlevel).then(res => {
-
 
                 if (this.state.new_level) {
                     this.state_new_level(50).then(res => {
@@ -1054,16 +1056,23 @@ class Game extends React.Component {
             "zIndex": " 1",
         }      
 
+        let mainShift = {
+            "position": "relative",
+            "top": "0px",
+            "left": "25%",
+            
+        }     
+
         //this.GameBackground_width
         //this.GameBackground_height
         //console.log(this.state.current_level)
         //console.log(this.state.nextlevel)
 
         return (
-            <div>
+            <div style={mainShift}>
                 <div className="fixed"><GameBackground width={this.GameBackground_width} height={this.GameBackground_height} level={this.state.current_level} loading={true} /></div >
-                <div id="board" style={hideincutscenestate}>
-                    <div style={hideincutscenestate} className="fixed"><GameBackground width={this.GameBackground_width} height={this.GameBackground_height} level={this.state.current_level} /></div >
+                <div id="board" style={this.hideincutscenestate}>
+                    <div style={this.hideincutscenestate} className="fixed"><GameBackground width={this.GameBackground_width} height={this.GameBackground_height} level={this.state.current_level} /></div >
                     <div id="layer_background" className="fixed">
                         {this.state.layer_background}
                     </div>
@@ -1072,7 +1081,7 @@ class Game extends React.Component {
                         {this.state.layer_entity}
                     </div>
                 </div >
-                <div style={hideincutscenestate} className="fixed">
+                <div style={this.hideincutscenestate} className="fixed">
                     <div id="controlscheme" style={controlSchemeStyle} >
                     <div id="dpad">
                         <table id="dpad_table" border="0" cellPadding="0" cellSpacing="0">
@@ -1136,8 +1145,12 @@ class App extends React.Component {
 
         let returnButtonStyle = {
             "position": "relative",
-            "top": level_background[this.state.selectedlevel].length * 32 + 96+ 210 + "px",
-            "left": (level_background[this.state.selectedlevel][0].length * 32 + 32)/2 + "px",
+            //"top": level_background[this.state.selectedlevel].length * 32 + 96+ 210 + "px",
+            //"left": (level_background[this.state.selectedlevel][0].length * 32 + 32)/2 + "px",
+
+            "top": "-64px",
+            "left": "0px",
+            "margin-left":"20%",
 
             "zIndex": " 1",
         }
@@ -1147,8 +1160,8 @@ class App extends React.Component {
             
             
             gamecontent.push(< Game level={this.state.selectedlevel} />)
-            
-            gamecontent.push(<button style={returnButtonStyle} onClick={() => { this.returnToMenu() }} >{tileImage(spr_button_back)}</button>)
+
+            gamecontent.push(<button style={returnButtonStyle} onClick={() => { this.returnToMenu() }} ><img className="return_img" src={spr_button_back} /></button>)
 
             this.setState({
                 content: gamecontent,
@@ -1160,14 +1173,12 @@ class App extends React.Component {
                     
             let menucontent = []
 
-            menucontent.push(< h2 width="340px"> Level Select</h2 >)
-
             for (let x = 0; x < (level_background.length); x++) {
-                menucontent.push(< li key={x}> <button onClick={() => { this.changeLevel(x) }}>Level {x}</button></li >)
+                menucontent.push(< li key={x}> <button onClick={() => { this.changeLevel(x) }}>Level {x+1}</button></li >)
             }
                 
             this.setState({
-                content: <table><thead></thead><tr ><td width="160px">{menucontent}</td><td width="180px">{credits}</td></tr></table>,
+                content: <table className="level_select"><thead>< h2 width="340px"> Level Select</h2 ></thead><tr ><td width="40%">{menucontent}</td><td width="60%">{credits}</td></tr></table>,
                 loadmenu: false
             })
         }
@@ -1176,6 +1187,7 @@ class App extends React.Component {
        
         return (
             <>
+                <div className="title"><img className="game_title" src={title_game} /></div>
                 <div className="MainGame">
                     {this.state.content}   
                 </div>

@@ -24,8 +24,9 @@ button{
     position:fixed;
 }
 
-.MainGame{
-    margin:64px;
+.MainGame {
+    margin-left: 20%;
+    margin-top: 64px;
 }
 
 .tile_img {
@@ -41,6 +42,15 @@ button{
     width: 128px;
     height: 32px;
     image-rendering: pixelated;
+    margin-left: 20%;
+    display: block;
+}
+
+.return_img {
+    resize: both;
+    width: 160px;
+    height: 32px;
+    image-rendering: pixelated;
     margin-left: auto;
     margin-right: auto;
     display: block;
@@ -51,13 +61,32 @@ button{
     width: 608px;
     height: 608px;
     image-rendering: pixelated;
-    display: block;  
+    display: block;
 }
 
 .vertical-center {
     position: relative;
     top: 50%;
     text-align: center;
+}
+
+.game_title {
+    margin:auto;
+    resize: both;
+    width: 296px;
+    height: 128px;
+    image-rendering: pixelated;
+    display: block;
+}
+.title {
+    width: 296px;
+    margin-left: 40%;
+    margin-top: 0px;
+}
+
+.level_select {
+    margin-left: 20%;
+    margin-top: 64px;
 }
 
 #tile {
