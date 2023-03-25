@@ -40,16 +40,32 @@ import spr_box_b from './graphics/box_b.png'
 import spr_box_c from './graphics/box_c.png'
 import spr_ladder from './graphics/ladder.png'
 
+import spr_grass_a from './graphics/grass_a.png'
+import spr_grass_b from './graphics/grass_b.png'
+import spr_grass_c from './graphics/grass_c.png'
+import spr_grass_d from './graphics/grass_d.png'
+import spr_ground_spot from './graphics/ground_x.png'
+
 import spr_arrow_up from './graphics/arrow_up.png'
 import spr_arrow_left from './graphics/arrow_left.png'
 import spr_arrow_right from './graphics/arrow_right.png'
 import spr_arrow_down from './graphics/arrow_down.png'
-import spr_button_reload from './graphics/reload.png'
+import spr_button_back from './graphics/back.png'
 
 import background_mountains_dawn from './graphics/background_mountains_dawn.png'
 import background_mountains_day from './graphics/background_mountains_day.png'
 import background_mountains_dusk from './graphics/background_mountains_dusk.png'
 import background_mountains_night from './graphics/background_mountains_night.png'
+
+import title_level_1 from './graphics/title_level_1.gif'
+import title_level_2 from './graphics/title_level_2.gif'
+import title_level_3 from './graphics/title_level_3.gif'
+import title_level_4 from './graphics/title_level_4.gif'
+import title_level_5 from './graphics/title_level_5.gif'
+import title_level_6 from './graphics/title_level_6.gif'
+import title_level_7 from './graphics/title_level_7.gif'
+import title_level_8 from './graphics/title_level_8.gif'
+import title_level_9 from './graphics/title_level_9.gif'
 
 //https://youtu.be/gI81fuLPz4A
 //Superfilm!
@@ -94,13 +110,13 @@ const level_background = [
         ["1", "3", "3", "3", "3", "3", "1"]
     ],
     [
-        ["1", "3", "3", "3", "3", "3", "1"],
-        ["2", "0", "0", "0", "0", "0", "2"],
-        ["2", "0", "0", "0", "0", "0", "2"],
-        ["2", "0", "0", "0", "0", "0", "2"],
-        ["2", "0", "0", "0", "0", "0", "2"],
-        ["2", "0", "0", "0", "0", "0", "2"],
-        ["1", "3", "3", "3", "3", "3", "1"],
+        ["1", "1", "1", "1", "3", "3", "3", "1"],
+        ["1", "1", "1", "2", "0", "0", "0", "2"],
+        ["1", "3", "3", "4", "0", "0", "0", "2"],
+        ["2", "-2", "0", "0", "0", "0", "0", "2"],
+        ["1", "3", "3", "4", "0", "0", "0", "2"],
+        ["1", "1", "1", "2", "0", "0", "0", "2"],
+        ["1", "1", "1", "1", "3", "3", "3", "1"],
     ]
 ]
 
@@ -144,13 +160,13 @@ const level_entity = [
         [" ", " ", " ", " ", " ", " ", " "]
     ],
     [
-        [" ", " ", " ", " ", " ", " ", " "],
-        [" ", " ", " ", " ", " ", " ", " "],
-        [" ", " ", " ", " ", " ", " ", " "],
-        [" ", " ", " ", "S", " ", " ", " "],
-        [" ", " ", " ", " ", " ", " ", " "],
-        [" ", " ", " ", " ", " ", " ", " "],
-        [" ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", "E", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", "B", " ", " ", " ", " "],
+        [" ", " "," ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", "S", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " "],
     ]
 ]
 /*
@@ -251,12 +267,12 @@ function tileInterpreter(tilemap) {
 
             if (tile == 3) {
                 if (y != 0 && y != (maxY - 1)) {
-                    if (tilemap[(parseInt(y) + 1)][x] == 0 && tilemap[y - 1][x] == 0) {
+                    if (tilemap[(parseInt(y) + 1)][x] <= 0 && tilemap[y - 1][x] <= 0) {
 
-                        if (tilemap[y][(parseInt(x) + 1)] == 0) {
+                        if (tilemap[y][(parseInt(x) + 1)] <= 0) {
                             new_tilemap[y][x] = tileImage(spr_border_cavity_horizontal_right, "solid")
                         } else
-                            if (tilemap[y][x - 1] == 0) {
+                            if (tilemap[y][x - 1] <= 0) {
                                 new_tilemap[y][x] = tileImage(spr_border_cavity_horizontal_left, "solid")
                             } else {
                                 new_tilemap[y][x] = tileImage(spr_border_cavity_horizontal, "solid")
@@ -264,7 +280,7 @@ function tileInterpreter(tilemap) {
                     }
 
                 }
-                if (y == 0) {
+                if (y <= 0) {
                     new_tilemap[y][x] = tileImage(spr_border_top, "solid")
                 }
 
@@ -282,8 +298,8 @@ function tileInterpreter(tilemap) {
                             } else {
                                 new_tilemap[y][x] = tileImage(spr_border_bottom, "solid")
                             }
-                } else if (y != 0 && tilemap[y - 1][x] == 0) {
-                    if (!(tilemap[y - 1][x] == 0)) { new_tilemap[y][x] = tileImage(spr_border_bottom, "solid") } else {
+                } else if (y != 0 && tilemap[y - 1][x] <= 0) {
+                    if (!(tilemap[y - 1][x] <= 0)) { new_tilemap[y][x] = tileImage(spr_border_bottom, "solid") } else {
                         if (tilemap[y][x] == 3) {
                             if (tilemap[y][x - 1] == 1) {
                                 new_tilemap[y][x] = tileImage(spr_border_bottom_left, "solid")
@@ -296,7 +312,7 @@ function tileInterpreter(tilemap) {
                         }
                     }
 
-                } else if (tilemap[(parseInt(y) + 1)][x] == 0) {
+                } else if (tilemap[(parseInt(y) + 1)][x] <= 0) {
                     new_tilemap[y][x] = tileImage(spr_border_top, "solid")
                 } else if (tilemap[y][(parseInt(x) + 1)] == 4 && tilemap[y][x-1] == 4){
                     //new_tilemap[y][x] = tileImage(spr_border_bottom_right, "solid")
@@ -319,6 +335,19 @@ function tileInterpreter(tilemap) {
                 if (rand == 13) { new_tilemap[y][x] = tileImage(spr_ground_a, "none") }
                 if (rand == 12) { new_tilemap[y][x] = tileImage(spr_ground_b, "none") }
                 if (rand == 11) { new_tilemap[y][x] = tileImage(spr_ground_c, "none") }
+
+            }
+            if (tilemap[y][x] == "-1") {
+                new_tilemap[y][x] = tileImage(spr_grass_a, "grass")
+                const rand = Math.floor(1 + Math.random() * (13 - 1));
+                //console.log(rand)
+                if (rand == 13) { new_tilemap[y][x] = tileImage(spr_grass_b, "grass") }
+                if (rand == 12) { new_tilemap[y][x] = tileImage(spr_grass_c, "grass") }
+                if (rand == 11) { new_tilemap[y][x] = tileImage(spr_grass_d, "grass") }
+
+            }
+            if (tilemap[y][x] == "-2") {
+                new_tilemap[y][x] = tileImage(spr_ground_spot, "button")
 
             }
         }
@@ -461,30 +490,73 @@ class GameBackground extends React.Component {
         this.state = {
             width: this.props.width,
             height: this.props.height,
-            level: this.props.height
+            level: this.props.height,
+            loading: this.props.loading
         }
     }
 
     render() {
 
-        let background = background_mountains_night
-        switch (this.props.level) {
-            case 0:
-                background = background_mountains_dawn
-                break;
-            case 1:
-                background = background_mountains_day
-                break;
-            case 2:
-                background = background_mountains_dusk
-                break;
-            case 3:
-                background = background_mountains_night
-                break;
-            default:
-                break;
-        }
+        let content = null
 
+        if (this.state.loading) {
+
+            let leveltitle = title_level_1
+            switch (this.props.level) {
+                case 0:
+                    leveltitle = title_level_1
+                    break;
+                case 1:
+                    leveltitle = title_level_2
+                    break;
+                case 2:
+                    leveltitle = title_level_3
+                    break;
+                case 3:
+                    leveltitle = title_level_4
+                    break;
+                case 4:
+                    leveltitle = title_level_5
+                    break;
+                case 5:
+                    leveltitle = title_level_6
+                    break;
+                case 6:
+                    leveltitle = title_level_7
+                    break;
+                case 7:
+                    leveltitle = title_level_8
+                    break;
+                case 8:
+                    leveltitle = title_level_9
+                    break;
+                default:
+                    break;
+            }  
+
+            content = < center class="vertical-center">< img className="title_img" src={leveltitle} /></center>
+
+        } else { 
+            let background = background_mountains_night
+            switch (this.props.level) {
+                case 0:
+                    background = background_mountains_dawn
+                    break;
+                case 1:
+                    background = background_mountains_day
+                    break;
+                case 2:
+                    background = background_mountains_dusk
+                    break;
+                case 3:
+                    background = background_mountains_night
+                    break;
+                default:
+                    break;
+            }        
+            content = < img className="backgroundImage" src={background} />
+        }
+        
         let gameBackgroundStyle = {
             "position": "fixed",
             "top": "0px",
@@ -499,8 +571,6 @@ class GameBackground extends React.Component {
             "height": this.props.height,
 
         }
-
-        let content = < img className="backgroundImage" src={background} />
 
         return (
             <div id="gamebackground" style={gameBackgroundStyle} >
@@ -530,8 +600,8 @@ class Game extends React.Component {
             canMove : true,
             reload_level : false,
 
-            current_level: 1,
-            nextlevel : 2,
+            current_level: parseInt(this.props.level),
+            nextlevel: parseInt(this.props.level + 1),
             current_background: [],
             current_entities: [],
 
@@ -562,6 +632,21 @@ class Game extends React.Component {
         if (this.state.current_entities[y][x].props.id == "exit") {
 
             console.log("That's an exit!")
+            
+
+            for (let y in this.state.current_background) {
+                for (let x in this.state.current_background[y]) {
+                    if (this.state.current_background[y][x].props.id == "button") {
+                        console.log("got a button : checking")
+                        if (this.state.current_entities[y][x].props.id == "box") {
+                            console.log("this button is covered")
+                        } else {
+                            console.log("this button is NOT covered")
+                            return false
+                        }
+                    }
+                }
+            }
             this.setState({ exit_found: true })
             return false
         }
@@ -570,6 +655,7 @@ class Game extends React.Component {
             console.log("collision : solid")
             return false
         }
+      
         if (this.state.current_entities[y][x].props.id == "box") {
             console.log("collision : box, checking")
 
@@ -605,6 +691,10 @@ class Game extends React.Component {
                 console.log("collision : second box")
                 return false
             }
+            if (this.state.current_background[y][x].props.id == "grass") {
+                console.log("collision : grass")
+                return false
+            }
 
             switch (dir) {
                 case "N":
@@ -629,6 +719,10 @@ class Game extends React.Component {
 
 
             this.move_box_cmd.push([x, y, dir])
+        }
+        if (this.state.current_background[y][x].props.id == "grass") {
+            console.log("collision : solid")
+            return true
         }
         return true
     }
@@ -691,12 +785,7 @@ class Game extends React.Component {
             }, 600
         )
 
-    }
-
-    reloadLevelB() {
-
-        this.setState({ reload_level: true })
-    }
+    } 
 
     /*functionOne(time) {
     return new Promise((resolve, reject) => {
@@ -834,9 +923,8 @@ class Game extends React.Component {
                         //console.log("Move")
                         //console.log("State new_level set to " + this.state.new_level)
                         //console.log("State new_move set to " + this.state.new_move)
-
-                    }
-                    console.log("new move processed")
+                        console.log("new move processed")
+                    }                   
                     resolve();
                 }, time
             )
@@ -844,7 +932,23 @@ class Game extends React.Component {
     }
 
     render() {
-      
+
+        if (!this.state.new_level) {
+            setTimeout(
+                () => {
+                    hideincutscenestate = {
+                        "visibility": "visible"
+                    }
+
+                }, 3000
+            )
+        } else {
+            hideincutscenestate = {
+                "visibility": "hidden"
+            }
+        }
+
+
         if (this.state.exit_found) {
             this.state_exit_found(100, this.state.nextlevel).then(res => {
 
@@ -905,30 +1009,17 @@ class Game extends React.Component {
 
             "zIndex": " 1",
         }
-
-
-
-        if (!this.state.new_level) {
-            setTimeout(
-                () => {
-                    hideincutscenestate = {
-                        "visibility": "visible"
-                    }
-
-                }, 1000
-            )
-        } else {
-            hideincutscenestate = {
-                "visibility": "hidden"
-            }
-        } 
+        
 
         //this.GameBackground_width
         //this.GameBackground_height
+        //console.log(this.state.current_level)
+        //console.log(this.state.nextlevel)
 
         return (
             <div>
-                <div id="board">
+                <div><GameBackground width={this.GameBackground_width} height={this.GameBackground_height} level={this.state.current_level} loading={true} /></div >
+                <div id="board" style={hideincutscenestate}>
                     <div style={hideincutscenestate}><GameBackground width={this.GameBackground_width} height={this.GameBackground_height} level={this.state.current_level} /></div >
                     <div id="layer_background">
                         {this.state.layer_background}
@@ -958,11 +1049,8 @@ class Game extends React.Component {
                                 <th id="tile"><MoveButton onClick={() => this.changeXY(0, 1)} value={tileImage(spr_arrow_down)}></MoveButton></th>
                                 <th id="tile"></th>
                             </tr>
-                        </table>
-                        <p></p>
-                        <MoveButton onClick={() => this.reloadLevelB()} value={tileImage(spr_button_reload)}></MoveButton>
+                        </table>                 
                     </div>
-                    {this.state.player_position}
                     </div>   
                     </div>
             </div>
@@ -970,4 +1058,70 @@ class Game extends React.Component {
     }
 }
 
-export default Game;
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            content: null ,
+            loadlevel: false ,
+            loadmenu: true ,
+            refresh: true ,
+            selectedlevel:0
+        }
+    }
+
+    changeLevel(newLevel) {
+        this.setState({
+            selectedlevel: newLevel,
+            loadlevel: true,
+            loadmenu: false,
+        })
+    }
+
+    returnToMenu() {
+        this.setState({
+            selectedlevel: 0,
+            loadlevel: false,
+            loadmenu: true,
+        })
+    }
+
+    render() {       
+        if (this.state.loadlevel) {
+            let gamecontent = []
+
+            gamecontent.push(< Game level={this.state.selectedlevel} />)
+            gamecontent.push(<MoveButton onClick={() => { this.returnToMenu() } } value={tileImage(spr_button_back)}></MoveButton>)
+
+            this.setState({
+                content: gamecontent,
+                loadlevel: false
+            })
+        }
+
+        if (this.state.loadmenu) {
+
+            let menucontent = []
+            for (let x = 0; x < (level_background.length); x++) { 
+                console.log("rea")
+                menucontent.push(< li key={x}> <button onClick={() => { this.changeLevel(x) }}>Level {x}</button></li >)
+            }
+                
+            this.setState({
+                content: menucontent,
+                loadmenu: false
+            })
+        }
+
+        console.log("Proceeding to level: "+this.state.selectedlevel)
+
+        return (
+            <div>
+                {this.state.content}
+                
+            </div>
+        )
+    }
+}
+
+export default App;

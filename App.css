@@ -12,6 +12,7 @@ code {
 body {
     background-color: #111111;
     color: white;
+    margin: auto;
 }
 
 button{
@@ -24,6 +25,16 @@ button{
     width: 32px;
     height: 32px;
     image-rendering: pixelated;
+    display: block;   
+}
+
+.title_img {
+    resize: both;
+    width: 128px;
+    height: 32px;
+    image-rendering: pixelated;
+    margin-left: auto;
+    margin-right: auto;
     display: block;
 }
 
@@ -32,8 +43,13 @@ button{
     width: 608px;
     height: 608px;
     image-rendering: pixelated;
-    display: block;
-    opacity: 0.75;
+    display: block;  
+}
+
+.vertical-center {
+    position: relative;
+    top: 50%;
+    text-align: center;
 }
 
 #tile {
