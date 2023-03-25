@@ -57,6 +57,11 @@ import background_mountains_day from './graphics/background_mountains_day.png'
 import background_mountains_dusk from './graphics/background_mountains_dusk.png'
 import background_mountains_night from './graphics/background_mountains_night.png'
 
+import background_desert_dawn from './graphics/background_desert_dawn.png'
+import background_desert_day from './graphics/background_desert_day.png'
+import background_desert_dusk from './graphics/background_desert_dusk.png'
+import background_desert_night from './graphics/background_desert_night.png'
+
 import title_level_1 from './graphics/title_level_1.gif'
 import title_level_2 from './graphics/title_level_2.gif'
 import title_level_3 from './graphics/title_level_3.gif'
@@ -117,6 +122,18 @@ const level_background = [
         ["1", "3", "3", "4", "0", "0", "0", "2"],
         ["1", "1", "1", "2", "0", "0", "0", "2"],
         ["1", "1", "1", "1", "3", "3", "3", "1"],
+    ],
+    [
+        ["1", "3", "3", "3", "1", "3", "3", "3", "3", "3", "1"],
+        ["2", "0", "0", "0", "2", "0", "0", "0", "0", "0", "2"],
+        ["2", "0", "-2", "0", "2", "0", "0", "0", "-2", "0", "2"],
+        ["2", "0", "0", "0", "0", "0", "0", "0", "0", "0", "2"],
+        ["2", "0", "0", "0", "2", "0", "0", "0", "0", "0", "2"],
+        ["2", "0", "0", "0", "2", "0", "0", "0", "0", "0", "2"],
+        ["1", "3", "3", "3", "1", "3", "3", "0", "3", "3", "1"],
+        ["1", "1", "1", "1", "1", "2", "0", "0", "0", "2", "1"],
+        ["1", "1", "1", "1", "1", "2", "0", "0", "0", "2", "1"],
+        ["1", "1", "1", "1", "1", "1", "3", "3", "3", "1", "1"],
     ]
 ]
 
@@ -164,9 +181,21 @@ const level_entity = [
         [" ", " ", " ", " ", " ", "E", " ", " "],
         [" ", " ", " ", " ", " ", " ", " ", " "],
         [" ", " ", " ", "B", " ", " ", " ", " "],
-        [" ", " "," ", " ", " ", " ", " ", " "],
-        [" ", " ", " ", " ", "S", " ", " ", " "],
+        [" ", " ", " ", " ", " ", "S", " ", " "],
         [" ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " "],
+    ],
+    [
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", "B", " ", " ", " ", "B", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", "S", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", "E", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
     ]
 ]
 /*
@@ -467,7 +496,7 @@ class TileMap extends React.Component {
 
             for (let x in tile_map[y]) {
 
-                tile_map_row.push(<th >{tile_map[y][x]}</th>);
+                tile_map_row.push(<th id="tablesquare">{tile_map[y][x]}</th>);
             }
             content.push(<tr>{tile_map_row}</tr>)
         }
@@ -551,6 +580,21 @@ class GameBackground extends React.Component {
                 case 3:
                     background = background_mountains_night
                     break;
+                case 4:
+                    background = background_desert_night
+                    break;
+                case 5:
+                    background = background_desert_dawn
+                    break;
+                case 6:
+                    background = background_desert_day
+                    break;
+                case 7:
+                    background = background_desert_dusk
+                    break;
+                case 8:
+                    background = background_desert_night
+                    break;
                 default:
                     break;
             }        
@@ -558,7 +602,7 @@ class GameBackground extends React.Component {
         }
         
         let gameBackgroundStyle = {
-            "position": "fixed",
+            "position": "relative",
             "top": "0px",
             "left": "0px",
 
@@ -1000,7 +1044,7 @@ class Game extends React.Component {
         this.GameBackground_height = (this.state.current_background.length * 32 + 96) + "px"
 
         let controlSchemeStyle = {
-            "position": "fixed",        
+            "position": "relative",        
             "top": (parseInt(this.GameBackground_height) + 32) + "px",
             "left": (parseInt(this.GameBackground_width)) / 2 - 80 + "px",
 
@@ -1008,8 +1052,7 @@ class Game extends React.Component {
             "overflow": "hidden",
 
             "zIndex": " 1",
-        }
-        
+        }      
 
         //this.GameBackground_width
         //this.GameBackground_height
@@ -1018,19 +1061,19 @@ class Game extends React.Component {
 
         return (
             <div>
-                <div><GameBackground width={this.GameBackground_width} height={this.GameBackground_height} level={this.state.current_level} loading={true} /></div >
+                <div className="fixed"><GameBackground width={this.GameBackground_width} height={this.GameBackground_height} level={this.state.current_level} loading={true} /></div >
                 <div id="board" style={hideincutscenestate}>
-                    <div style={hideincutscenestate}><GameBackground width={this.GameBackground_width} height={this.GameBackground_height} level={this.state.current_level} /></div >
-                    <div id="layer_background">
+                    <div style={hideincutscenestate} className="fixed"><GameBackground width={this.GameBackground_width} height={this.GameBackground_height} level={this.state.current_level} /></div >
+                    <div id="layer_background" className="fixed">
                         {this.state.layer_background}
                     </div>
 
-                    <div id="layer_entities">
+                    <div id="layer_entities" className="fixed">
                         {this.state.layer_entity}
                     </div>
                 </div >
-                <div style={hideincutscenestate}>
-                <div id="controlscheme" style={controlSchemeStyle}>
+                <div style={hideincutscenestate} className="fixed">
+                    <div id="controlscheme" style={controlSchemeStyle} >
                     <div id="dpad">
                         <table id="dpad_table" border="0" cellPadding="0" cellSpacing="0">
                             <tr>
@@ -1057,6 +1100,8 @@ class Game extends React.Component {
         )
     }
 }
+
+const credits = [<h3>Credits</h3>,<p>Graphics & Code by S F</p>]
 
 class App extends React.Component {
     constructor(props) {
@@ -1086,12 +1131,24 @@ class App extends React.Component {
         })
     }
 
-    render() {       
+    render() {   
+       
+
+        let returnButtonStyle = {
+            "position": "relative",
+            "top": level_background[this.state.selectedlevel].length * 32 + 96+ 210 + "px",
+            "left": (level_background[this.state.selectedlevel][0].length * 32 + 32)/2 + "px",
+
+            "zIndex": " 1",
+        }
+
         if (this.state.loadlevel) {
             let gamecontent = []
-
+            
+            
             gamecontent.push(< Game level={this.state.selectedlevel} />)
-            gamecontent.push(<MoveButton onClick={() => { this.returnToMenu() } } value={tileImage(spr_button_back)}></MoveButton>)
+            
+            gamecontent.push(<button style={returnButtonStyle} onClick={() => { this.returnToMenu() }} >{tileImage(spr_button_back)}</button>)
 
             this.setState({
                 content: gamecontent,
@@ -1100,26 +1157,29 @@ class App extends React.Component {
         }
 
         if (this.state.loadmenu) {
-
+                    
             let menucontent = []
-            for (let x = 0; x < (level_background.length); x++) { 
-                console.log("rea")
+
+            menucontent.push(< h2 width="340px"> Level Select</h2 >)
+
+            for (let x = 0; x < (level_background.length); x++) {
                 menucontent.push(< li key={x}> <button onClick={() => { this.changeLevel(x) }}>Level {x}</button></li >)
             }
                 
             this.setState({
-                content: menucontent,
+                content: <table><thead></thead><tr ><td width="160px">{menucontent}</td><td width="180px">{credits}</td></tr></table>,
                 loadmenu: false
             })
         }
 
         console.log("Proceeding to level: "+this.state.selectedlevel)
-
+       
         return (
-            <div>
-                {this.state.content}
-                
-            </div>
+            <>
+                <div className="MainGame">
+                    {this.state.content}   
+                </div>
+            </>
         )
     }
 }

@@ -20,12 +20,20 @@ button{
     height:50px;
 }
 
+.fixed{
+    position:fixed;
+}
+
+.MainGame{
+    margin:64px;
+}
+
 .tile_img {
     resize: both;
     width: 32px;
     height: 32px;
     image-rendering: pixelated;
-    display: block;   
+    display: block;
 }
 
 .title_img {
@@ -65,7 +73,7 @@ button{
     border: none;
 }
 
-th {
+#tablesquare {
     width: 32px;
     height: 32px;
 }
@@ -91,7 +99,7 @@ th {
 #layer_background {
     z-index: 2;
     position: fixed;
-    margin:32px;
+    margin: 32px;
 }
 
 #layer_entities {
@@ -112,9 +120,4 @@ button{
     font: inherit;
     cursor: pointer;
     outline: inherit;
-}
-
-#dumb{
-    position:absolute;
-    top:500px;
 }
