@@ -35,6 +35,8 @@ import spr_border_cavity_horizontal from './graphics/border_cavity_horizontal.pn
 import spr_border_cavity_horizontal_left from './graphics/border_cavity_left.png'
 import spr_border_cavity_horizontal_right from './graphics/border_cavity_right.png'
 
+import spr_border_cavity_hole from './graphics/border_cavity_single.png'
+
 import spr_box_a from './graphics/box_a.png'
 import spr_box_b from './graphics/box_b.png'
 import spr_box_c from './graphics/box_c.png'
@@ -136,6 +138,43 @@ const level_background = [
         ["1", "1", "1", "1", "1", "2", "0", "0", "0", "2", "1"],
         ["1", "1", "1", "1", "1", "2", "0", "0", "0", "2", "1"],
         ["1", "1", "1", "1", "1", "1", "3", "3", "3", "1", "1"],
+    ],
+    [
+        ["1", "1", "1", "3", "1", "1", "1", "1",],
+        ["1", "3", "4", "-2", "4", "3", "1", "1",],
+        ["2", "0", "0", "0", "0", "0", "2", "1",],
+        ["2", "0", "2", "0", "5", "0", "4", "1",],
+        ["2", "-2", "2", "0", "0", "0", "0", "2"],
+        ["2", "0", "2", "0", "0", "0", "0", "2"],
+        ["2", "0", "0", "-2", "0", "0", "0", "2"],
+        ["2", "0", "0", "2", "0", "0", "0", "2"],
+        ["1", "3", "3", "1", "3", "3", "3", "1"]
+    ],
+    [
+        ["1", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "1"],
+        ["2", "-1", "-1", "-1", "0", "0", "0", "0", "0", "0", "0", "2"],
+        ["2", "-1", "-1", "-1", "0", "0", "0", "0", "-2", "0", "0", "2"],
+        ["2", "-1", "-1", "-1", "0", "0", "-1", "-1", "-1", "-1", "-1", "2"],
+        ["2", "-1", "-1", "-1", "0", "0", "0", "0", "0", "-1", "-1", "2"],
+        ["2", "-1", "-1", "-1", "0", "0", "0", "0", "0", "-1", "-1", "2"],
+        ["1", "3", "3", "3", "3", "4", "0", "0", "0", "4", "3", "1"],
+        ["1", "1", "1", "1", "1", "2", "0", "0", "0", "2", "1", "1"],
+        ["1", "1", "1", "1", "1", "2", "0", "0", "0", "2", "1", "1"],
+        ["1", "1", "1", "1", "1", "1", "3", "3", "3", "1", "1", "1"],
+    ],
+    [
+        ["1", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "1"],
+        ["2", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "2"],
+        ["2", "-1", "0", "-1", "0", "0", "0", "0", "0", "0", "-1", "2"],
+        ["2", "-1", "0", "-1", "-1", "-1", "-1", "0", "3", "3", "3", "1"],
+        ["2", "-1", "0", "0", "0", "0", "0", "0", "0", "0", "-1", "2"],
+        ["2", "-1", "0", "-1", "-1", "-1", "-1", "-1", "-1", "0", "-1", "2"],
+        ["2", "-1", "0", "0", "0", "-1", "0", "0", "0", "0", "-1", "2"],
+        ["2", "-1", "-1", "-1", "0", "-1", "0", "-1", "-1", "0", "-1", "2"],
+        ["2", "-1", "-1", "-1", "0", "0", "0", "-2", "-1", "0", "-1", "2"],
+        ["2", "-1", "-1", "-1", "0", "-1", "0", "-1", "-1", "-2", "-1", "2"],
+        ["2", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "2"],
+        ["1", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "1"]
     ]
 ]
 
@@ -198,6 +237,43 @@ const level_entity = [
         [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
         [" ", " ", " ", " ", " ", " ", " ", "E", " ", " ", " "],
         [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+    ],
+    [
+        [" ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", "B", " ", " ", " ", " ", " "],
+        [" ", " ", " ", "B", " ", " ", " ", " "],
+        [" ", "S", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", "B", " ", " ", " ", "E", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " "]
+    ],
+    [
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", "S", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", "B", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", "E", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+    ],
+    [
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", "S", " ", "B", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", "E", " ", " ", "B", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "]
     ]
 ]
 /*
@@ -214,7 +290,6 @@ function functionOne(testInput) {
 */
 
 function tileImage(graphic, id = "none") {
-
     return (<img className="tile_img" id={id} src={graphic} />)
 }
 
@@ -231,8 +306,8 @@ function tileInterpreter(tilemap) {
             if (tile == 4) {
 
 
-                if ((tilemap[y][x - 1] == 3 || tilemap[y][x - 1] == 1 || tilemap[y][x - 1] == 4 )&& tilemap[y][(parseInt(x) + 1)] == 0) {
-                    if (tilemap[(parseInt(y) + 1)][x] == 0) {
+                if ((tilemap[y][x - 1] == 3 || tilemap[y][x - 1] <= 1 || tilemap[y][x - 1] == 4) && tilemap[y][(parseInt(x) + 1)] <= 0) {
+                    if (tilemap[(parseInt(y) + 1)][x] <= 0) {
                         new_tilemap[y][x] = tileImage(spr_border_corner_right_bottom, "solid")
                     } else {
                         new_tilemap[y][x] = tileImage(spr_border_corner_right, "solid")
@@ -240,19 +315,23 @@ function tileInterpreter(tilemap) {
 
                 }
 
-                if (tilemap[y][x - 1] == 0 && (tilemap[y][(parseInt(x) + 1)] == 3 || tilemap[y][(parseInt(x) + 1)] == 1 || tilemap[y][(parseInt(x) + 1)] == 4)) {
-                    if (tilemap[(parseInt(y) + 1)][x] == 0) {
+                if (tilemap[y][x - 1] <= 0 && (tilemap[y][(parseInt(x) + 1)] == 3 || tilemap[y][(parseInt(x) + 1)] <= 1 || tilemap[y][(parseInt(x) + 1)] == 4)) {
+                    if (tilemap[(parseInt(y) + 1)][x] <= 0) {
                         new_tilemap[y][x] = tileImage(spr_border_corner_left_bottom, "solid")
                     } else {
                         new_tilemap[y][x] = tileImage(spr_border_corner_left, "solid")
                     }
                 } else {
-                    if (tilemap[(parseInt(y) + 1)][x] == 0) {
+                    if (tilemap[(parseInt(y) + 1)][x] <= 0) {
                         new_tilemap[y][x] = tileImage(spr_border_corner_right_bottom, "solid")
                     } else {
                         new_tilemap[y][x] = tileImage(spr_border_corner_right, "solid")
                     }
                 }
+            }
+
+            if (tile == 5) {
+                new_tilemap[y][x] = tileImage(spr_border_cavity_hole, "solid")
             }
         }
     }
@@ -262,21 +341,21 @@ function tileInterpreter(tilemap) {
             let tile = tilemap[y][x]
 
             if (tile == 2) {
-                if (tilemap[y][(parseInt(x) + 1)] == 0 && tilemap[y][(parseInt(x) - 1)] == 0) {
+                if (tilemap[y][(parseInt(x) + 1)] <= 0 && tilemap[y][(parseInt(x) - 1)] <= 0) {
 
-                    if (tilemap[(parseInt(y) + 1)][x] == 0) {
+                    if (tilemap[(parseInt(y) + 1)][x] <= 0) {
                         new_tilemap[y][x] = tileImage(spr_border_cavity_vertical_bottom, "solid")
                     } else
-                        if (tilemap[y - 1][x] == 0) {
+                        if (tilemap[y - 1][x] <= 0) {
                             new_tilemap[y][x] = tileImage(spr_border_cavity_vertical_top, "solid")
                         } else {
                             new_tilemap[y][x] = tileImage(spr_border_cavity_vertical, "solid")
                         }
                 } else {
-                    if (tilemap[y][(parseInt(x) + 1)] == 0) {
+                    if (tilemap[y][(parseInt(x) + 1)] <= 0) {
                         new_tilemap[y][x] = tileImage(spr_border_left, "solid")
                     }
-                    if (tilemap[y][x - 1] == 0) {
+                    if (tilemap[y][x - 1] <= 0) {
                         new_tilemap[y][x] = tileImage(spr_border_right, "solid")
                     }
                 }
@@ -1059,7 +1138,7 @@ class Game extends React.Component {
         let mainShift = {
             "position": "relative",
             "top": "0px",
-            "left": "25%",
+            "left": "20%",
             
         }     
 
