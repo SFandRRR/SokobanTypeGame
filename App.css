@@ -20,12 +20,19 @@ button{
     height:50px;
 }
 
-.fixed{
-    position:fixed;
+.controlButtonsStyle {
+    position: relative;
+    top: -64px;
+    left: -16px;
+    z-Index:  1;
+}
+
+.fixed {
+    position: fixed;
 }
 
 .MainGame {
-    margin-left: 20%;
+    margin-left: 50%;
     margin-top: 64px;
 }
 
@@ -56,6 +63,11 @@ button{
     display: block;
 }
 
+.retryButton{
+    position:relative;
+    left: 128px;
+}
+
 .backgroundImage {
     resize: both;
     width: 608px;
@@ -80,13 +92,21 @@ button{
 }
 .title {
     width: 296px;
-    margin-left: 40%;
+    margin-left: 50%;
     margin-top: 0px;
 }
 
 .level_select {
-    margin-left: 20%;
-    margin-top: 64px;
+    margin-top: 32px;
+}
+
+.level_select_button {
+    height: 32px;
+    list-style-image: url(./graphics/point.png);
+}
+
+.level_select_button:hover {
+    opacity:0.3;
 }
 
 #tile {
