@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
 import './App.css';
 
 import spr_player_s from './graphics/PlayerS.gif'
@@ -52,8 +51,11 @@ import spr_arrow_up from './graphics/arrow_up.png'
 import spr_arrow_left from './graphics/arrow_left.png'
 import spr_arrow_right from './graphics/arrow_right.png'
 import spr_arrow_down from './graphics/arrow_down.png'
+
 import spr_button_back from './graphics/back.png'
 import spr_button_retry from './graphics/retry.png'
+import spr_button_sound_on from './graphics/sound_on.png'
+import spr_button_sound_off from './graphics/sound_off.png'
 
 import background_mountains_dawn from './graphics/background_mountains_dawn.png'
 import background_mountains_day from './graphics/background_mountains_day.png'
@@ -74,11 +76,20 @@ import title_level_6 from './graphics/title_level_6.gif'
 import title_level_7 from './graphics/title_level_7.gif'
 import title_level_8 from './graphics/title_level_8.gif'
 import title_level_9 from './graphics/title_level_9.gif'
+import title_level_10 from './graphics/title_level_10.gif'
 
 import title_game from './graphics/title.png'
 
+import sound_move from './sound/move.wav'
+import sound_blocked from './sound/blocked.wav'
+import sound_select from './sound/select.wav'
+import sound_next_level from './sound/nextlevel.wav'
+
 //https://youtu.be/gI81fuLPz4A
 //Superfilm!
+
+var global_level = 0
+var soundoffon = true
 
 const level_background = [
     [
@@ -141,10 +152,10 @@ const level_background = [
         ["1", "1", "1", "1", "1", "1", "3", "3", "3", "1", "1"],
     ],
     [
-        ["1", "1", "1", "3", "1", "1", "1", "1",],
-        ["1", "3", "4", "-2", "4", "3", "1", "1",],
-        ["2", "0", "0", "0", "0", "0", "2", "1",],
-        ["2", "0", "2", "0", "5", "0", "4", "1",],
+        ["1", "1", "1", "3", "1", "1", "1", "1"],
+        ["1", "3", "4", "-2", "4", "3", "1", "1"],
+        ["2", "0", "0", "0", "0", "0", "2", "1"],
+        ["2", "0", "2", "0", "5", "0", "4", "1"],
         ["2", "-2", "2", "0", "0", "0", "0", "2"],
         ["2", "0", "2", "0", "0", "0", "0", "2"],
         ["2", "0", "0", "-2", "0", "0", "0", "2"],
@@ -176,7 +187,30 @@ const level_background = [
         ["2", "-1", "-1", "-1", "0", "-1", "0", "-1", "-1", "-2", "-1", "2"],
         ["2", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "2"],
         ["1", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "1"]
-    ]
+    ],
+    [
+        ["1", "3", "3", "3", "3", "3", "3", "1", "1", "1"],
+        ["2", "0", "0", "0", "-1", "-1", "-1", "2", "1", "1"],
+        ["2", "0", "-2", "0", "3", "3", "0", "4", "3", "1"],
+        ["2", "0", "0", "0", "-1", "0", "0", "0", "0", "2"],
+        ["2", "0", "0", "0", "4", "4", "0", "3", "3", "1"],
+        ["2", "0", "0", "0", "4", "4", "0", "0", "4", "1"],
+        ["2", "0", "5", "0", "0", "0", "-2", "0", "0", "2"],
+        ["2", "0", "0", "0", "4", "4", "0", "4", "3", "1"],
+        ["1", "3", "3", "3", "1", "1", "3", "1", "1", "1"]
+    ],
+    [
+    ["1", "3", "3", "3", "3", "3", "3", "3", "3", "3", "1"],
+    ["2", "0", "0", "0", "0", "0", "0", "0", "0", "0", "2"],
+    ["2", "0", "4", "4", "0", "2", "0", "-1", "-1", "0", "2"],
+    ["2", "0", "2", "2", "0", "2", "0", "-1", "-1", "0", "2"],
+    ["2", "0", "4", "4", "0", "2", "0", "-1", "-1", "0", "2"],
+    ["2", "0", "0", "0", "0", "0", "0", "-1", "-1", "0", "2"],
+    ["2", "0", "3", "3", "3", "0", "0", "0", "0", "0", "2"],
+    ["2", "0", "0", "0", "0", "0", "0", "0", "-2", "0", "2"],
+    ["2", "0", "0", "0", "0", "0", "0", "0", "0", "0", "2"],
+    ["1", "3", "3", "3", "3", "3", "3", "3", "3", "3", "1"],
+    ],
 ]
 
 const level_entity = [
@@ -275,20 +309,37 @@ const level_entity = [
         [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
         [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
         [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "]
-    ]
+    ],
+    [
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", "B", " ", " ", " "],
+        [" ", " ", " ", " ", " ", "B", " ", " ", "E", " "],
+        [" ", " ", "S", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", "B", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " "]
+    ],
+    [
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", "B", " ", " ", " ", "B", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", "S", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+        [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+    ],
 ]
-/*
-function functionOne(testInput) {
-    return new Promise((resolve, reject) => {
-        setTimeout(
-            () => {
-                console.log("Inside the promise");
-                resolve();
-            }, 3000
-        );
-    });
-};
-*/
+
+function play_sound(sound) {
+    if (soundoffon) { 
+        new Audio(sound).play()
+    }
+}
 
 function tileImage(graphic, id = "none") {
     return (<img className="tile_img" id={id} src={graphic} />)
@@ -637,6 +688,9 @@ class GameBackground extends React.Component {
                 case 8:
                     leveltitle = title_level_9
                     break;
+                case 9:
+                    leveltitle = title_level_10
+                    break;
                 default:
                     break;
             }  
@@ -674,6 +728,7 @@ class GameBackground extends React.Component {
                     background = background_desert_night
                     break;
                 default:
+                    background = background_desert_night
                     break;
             }        
             content = < img className="backgroundImage" src={background} />
@@ -769,6 +824,7 @@ class Game extends React.Component {
                     }
                 }
             }
+            play_sound(sound_next_level)
             this.setState({ exit_found: true })
             return false
         }
@@ -838,15 +894,17 @@ class Game extends React.Component {
                 default:
                     break;
             }
-
-
             this.move_box_cmd.push([x, y, dir])
+            setTimeout(
+                () => {
+                    return true
+                }, 10)
         }
         if (this.state.current_background[y][x].props.id === "grass") {
             console.log("collision : solid")
             return true
         }
-        return true
+                return true           
     }
 
     changeXY(x, y) {
@@ -876,15 +934,18 @@ class Game extends React.Component {
         x = this.state.player_position[0] + x
         y = this.state.player_position[1] + y
 
-        if (this.checkCollision(x, y, dir)) {
+            if (this.checkCollision(x, y, dir)) {
 
-            this.move_plr_cmd.push([this.state.player_position[0], this.state.player_position[1], dir])
+                play_sound(sound_move)
+                this.move_plr_cmd.push([this.state.player_position[0], this.state.player_position[1], dir])
 
-            this.setState({ player_position: [x, y] });
-            console.log("Player postion:" + this.state.player_position)
-            console.log("Move List:" + this.move_plr_cmd)
+                this.setState({ player_position: [x, y] });
+                console.log("Player postion:" + this.state.player_position)
+                console.log("Move List:" + this.move_plr_cmd)
 
-        }
+            } else {
+                play_sound(sound_blocked)
+            }
         }  
 
         this.setState({ new_move: true })
@@ -903,7 +964,6 @@ class Game extends React.Component {
                 this.setState({ exit_found: true })
                 
                 this.setState({ canMove: false })
-                console.log("ajajaj")
             }, 600
         )
 
@@ -985,6 +1045,7 @@ class Game extends React.Component {
 
                         let starter_pos = {...level_entity[this.state.current_level]}
 
+                        global_level = this.state.current_level
 
                         for (let y in starter_pos) {
                             for (let x in starter_pos[y]) {
@@ -1070,6 +1131,8 @@ class Game extends React.Component {
                 )
             }
         } else {
+
+            
             this.hideincutscenestate = {
                 "visibility": "hidden"
             }
@@ -1183,7 +1246,7 @@ class Game extends React.Component {
     }
 }
 
-const credits = [<h3>Credits</h3>,<p>Graphics & Code by S F</p>]
+const credits = [<h3>Credits</h3>, <p>Graphics & Code by Stanislaw Frak</p>, <p>Sound made using BFXR</p>, <img className="tile_img" src={spr_player_w} />]
 
 class App extends React.Component {
     constructor(props) {
@@ -1198,6 +1261,8 @@ class App extends React.Component {
     }
 
     changeLevel(newLevel) {
+
+        play_sound(sound_select)
         this.setState({
             selectedlevel: newLevel,
             loadlevel: true,
@@ -1206,6 +1271,7 @@ class App extends React.Component {
     }
 
     returnToMenu() {
+        play_sound(sound_select)
         this.setState({
             selectedlevel: 0,
             loadlevel: false,
@@ -1213,8 +1279,44 @@ class App extends React.Component {
         })
     }
 
-    render() {   
-       
+    reloadLevel() {
+        this.setState({
+            selectedlevel: global_level,
+            loadlevel: false,
+            loadmenu: true,
+        })
+        setTimeout(
+            () => {
+                this.setState({
+                    selectedlevel: global_level,
+                    loadlevel: true,
+                    loadmenu: false,
+                })
+            
+            }, 10
+        )
+    }
+
+    render() {
+
+
+        let img = null
+        if (soundoffon) {
+            
+            img = <img className="tile_img" src={spr_button_sound_on} />
+        } else {
+            img = <img className="tile_img" src={spr_button_sound_off} />
+        }
+
+        
+        let mutebutton= < button className="muteButton" onClick={() => {               
+                console.log("Play sound? " + soundoffon)
+            soundoffon = (!soundoffon)
+            play_sound(sound_move)
+            this.setState({ loadmenu: true })
+
+            }} >{img}</button >
+
 
         let mainShift = {
             "position": "relative",
@@ -1229,7 +1331,9 @@ class App extends React.Component {
             gamecontent.push(< Game level={this.state.selectedlevel} />)
 
             gamecontent.push(<div className="controlButtonsStyle"><button onClick={() => { this.returnToMenu() }} ><img className="return_img" src={spr_button_back} /></button>
-                <button className="retryButton" onClick={() => { this.returnToMenu() }} ><img className="return_img" src={spr_button_retry} /></button></div>)
+                <button className="retryButton" onClick={() => { this.reloadLevel() }} ><img className="return_img" src={spr_button_retry} /></button>
+                
+            </div>)
 
             this.setState({
                 content: gamecontent,
@@ -1242,11 +1346,13 @@ class App extends React.Component {
             let menucontent = []
 
             for (let x = 0; x < (level_background.length); x++) {
-                menucontent.push(< li className="level_select_button" key={x}> <button onClick={() => { this.changeLevel(x) }}>Level {x+1}</button></li >)
+                menucontent.push(< li className="level_select_button" key={x}> <button className="levelButton" onClick={() => { this.changeLevel(x) }}>Level {x+1}</button></li >)
             }
-                
+
             this.setState({
-                content: <table className="level_select"><thead>< h2 width="340px"> Level Select</h2 ></thead><tr ><td width="40%">{menucontent}</td><td width="60%">{credits}</td></tr></table>,
+                content: <table className="level_select"><thead>< h2 width="340px"> Level Select</h2 ></thead><tr >
+                    <td width="40%">{menucontent}</td>
+                    <td width="60%">{mutebutton}{credits}</td></tr></table>,
                 loadmenu: false
             })
         }
@@ -1258,10 +1364,12 @@ class App extends React.Component {
                 <div className="title" style={mainShift}><img className="game_title" src={title_game} /></div>
                 <div className="MainGame" style={mainShift}>
                     {this.state.content}   
-                </div>
+                </div>                               
             </>
         )
     }
 }
+
+//<button onClick={() => { play_sound(sound_move) } }>AAAAAAAAAAAAAAA</button>
 
 export default App;

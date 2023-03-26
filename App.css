@@ -20,6 +20,10 @@ button{
     height:50px;
 }
 
+td {
+    align-content: center
+}
+
 .controlButtonsStyle {
     position: relative;
     top: -64px;
@@ -68,6 +72,10 @@ button{
     left: 128px;
 }
 
+.muteButton {
+    position: relative;
+}
+
 .backgroundImage {
     resize: both;
     width: 608px;
@@ -96,12 +104,18 @@ button{
     margin-top: 0px;
 }
 
+.levelButton {
+    height: 32px;
+    width: 64px;
+}
+
 .level_select {
     margin-top: 32px;
 }
 
 .level_select_button {
     height: 32px;
+    width: 200px;
     list-style-image: url(./graphics/point.png);
 }
 
