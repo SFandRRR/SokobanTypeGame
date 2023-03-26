@@ -29,4 +29,5 @@ Dodatkowo dodane elementy :
 ✓- Pola po których nie da się przesunąć pudełek
 
 Znane błędy :
-- Gracz czasami zastępuje pudełko, coś związane z kolizją
+- Gracz czasami zastępuje pudełko, coś związane z kolizją, wystarczy zrestartować
+- Czasami elementy poziomu się nie załadują, wystarczy zrestartować
