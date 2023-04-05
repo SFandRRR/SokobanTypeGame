@@ -1,0 +1,33 @@
+Założenia generalne :
+✓- Gra 2D
+✓- Widok z góry
+✓- Napisana z wykorzystaniem JS React
+
+Gameplay :
+✓- Gracz ma za zadanie dostanie się z punktu startowego do wyjścia
+✓- jest wstanie przesuwać szkrzynie czy skały
+✓- kilka poziomów jeżeli starczy czasu
+✓- opcja powtórzenia i wyboru poziomu
+
+Poruszanie się :
+✓- poruszanie za pomocą przycisków umieszczonych na stronie
+✓- kolizja z ścianami i obiektami
+✓- gracz wstanie przesunąć maksymalnie jeden obiekt naraz
+✓- poruszanie jedno pole naraz
+
+Wygląd :
+✓- plansza wykonana z wykorzystaniem tabel, ze względu na symetryczne ułożenie pól
+✓- 2 tabele, jedna z grafiką tła, druga z grafiką elementów gry
+✓- grafiki placeholderowe w postaci znaków i symboli
+✓- grafika pixelart jeżeli zdąży czasu
+
+Dodatkowo dodane elementy :
+✓- Main menu
+✓- Różne tła wzależności od poziomu
+✓- Efekty dzwiękowe
+✓- Pola które muszą być zakryte żeby ukończyć poziom
+✓- Pola po których nie da się przesunąć pudełek
+
+Znane błędy :
+- Gracz czasami zastępuje pudełko, coś związane z kolizją, wystarczy zrestartować
+- Czasami elementy poziomu się nie załadują, wystarczy zrestartować
